@@ -1,5 +1,10 @@
-# CakePHP 3
+.vscode/*
+.idea/*
+.DS_Store
+/.htaccess
+.env
 
+/tmp/*
 /vendor/*
 /config/app.php
 
@@ -23,3 +28,4 @@
 /app/Config/core.php
 /app/Config/database.php
 /vendors/*
+*.log

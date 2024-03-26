@@ -1,0 +1,14 @@
+version: '2.2'
+
+services:
+    bemodule:
+      container_name: budgetcontrol-ms-authtentication
+      image: budgetcontrol/core:xdebug-v2.2
+      ports:
+        - "8083:80"
+      restart: unless-stopped
+
+networks:
+  budgetcontrol_network:
+    external: false
+    name: budgetcontrol_network

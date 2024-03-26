@@ -1,0 +1,16 @@
+version: '2.2'
+
+services:
+    bemodule:
+      container_name: budgetcontrol-ms-authtentication
+      image: budgetcontrol/core:v2.2
+      volumes:
+        - ./:/var/www/workdir
+      networks:
+        - budgetcontrol_network
+      restart: unless-stopped
+
+networks:
+  budgetcontrol_network:
+    external: false
+    name: budgetcontrol_network
