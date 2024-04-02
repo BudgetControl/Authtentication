@@ -62,12 +62,30 @@ class AuthController
         $user = User::find($userId);
         $workspace = DB::select(
             'select * from workspaces as w 
-            inner join workspaces_users_mm as ws on ws.workspace_id = w.id 
-            where ws.user_id = ?',
+            inner join workspaces_users_mm as ws on ws.workspace_id = w.id
+            where ws.workspace_id = ?',
             [$userId]
         );
 
-        $result = array_merge($user->toArray(), ['workspaces' => $workspace]);
+        $active = '';
+        $settings = [];
+        // get the current workspace
+        foreach ($workspace as $value) {
+            if ($value->active == 1) {
+                $active = $value->uuid;
+                $currentWsId = $value->id;
+                $settings = DB::select(
+                    "select * from workspace_settings where id = $currentWsId"
+                );
+                break;
+            }
+        }
+
+        if(empty($settings)) {
+            throw new AuthException('Workspace settings not found', 404);
+        }
+
+        $result = array_merge($user->toArray(), ['workspaces' => $workspace], ['current_ws' =>  $active], ['workspace_settings' => $settings[0]] );
         return response($result, 200);
     }
 }
