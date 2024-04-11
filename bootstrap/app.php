@@ -23,8 +23,39 @@ $capsule->addConnection($connections['mysql']);
 $capsule->bootEloquent();
 $capsule->setAsGlobal();
 
-$streamHandler = new \Monolog\Handler\StreamHandler(__DIR__.'/../storage/logs/log-'.date("Ymd").'.log', Level::Debug);
-$logger = new \Monolog\Logger('app');
+//setup log level from env
+switch(env('APP_LOG_LEVEL','debug')) {
+    case 'debug':
+        $logLevel = Level::DEBUG;
+        break;
+    case 'info':
+        $logLevel = Level::INFO;
+        break;
+    case 'notice':
+        $logLevel = Level::NOTICE;
+        break;
+    case 'warning':
+        $logLevel = Level::WARNING;
+        break;
+    case 'error':
+        $logLevel = Level::ERROR;
+        break;
+    case 'critical':
+        $logLevel = Level::CRITICAL;
+        break;
+    case 'alert':
+        $logLevel = Level::ALERT;
+        break;
+    case 'emergency':
+        $logLevel = Level::EMERGENCY;
+        break;
+    default:
+        $logLevel = Level::DEBUG;
+}
+
+$logPath = env('APP_LOG_PATH',__DIR__.'/../storage/logs/log-'.date("Ymd").'.log');
+$streamHandler = new \Monolog\Handler\StreamHandler($logPath, $logLevel);
+$logger = new \Monolog\Logger('MS-AUTHTENTICATION');
 $formatter = new \Monolog\Formatter\SyslogFormatter();
 $streamHandler->setFormatter($formatter);
 $logger->pushHandler($streamHandler);
