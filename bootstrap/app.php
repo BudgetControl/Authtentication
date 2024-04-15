@@ -26,31 +26,31 @@ $capsule->setAsGlobal();
 //setup log level from env
 switch(env('APP_LOG_LEVEL','debug')) {
     case 'debug':
-        $logLevel = Level::DEBUG;
+        $logLevel = Level::Debug;
         break;
     case 'info':
-        $logLevel = Level::INFO;
+        $logLevel = Level::Info;
         break;
     case 'notice':
-        $logLevel = Level::NOTICE;
+        $logLevel = Level::Notice;
         break;
     case 'warning':
-        $logLevel = Level::WARNING;
+        $logLevel = Level::Warning;
         break;
     case 'error':
-        $logLevel = Level::ERROR;
+        $logLevel = Level::Error;
         break;
     case 'critical':
-        $logLevel = Level::CRITICAL;
+        $logLevel = Level::Critical;
         break;
     case 'alert':
-        $logLevel = Level::ALERT;
+        $logLevel = Level::Alert;
         break;
     case 'emergency':
-        $logLevel = Level::EMERGENCY;
+        $logLevel = Level::Emergency;
         break;
     default:
-        $logLevel = Level::DEBUG;
+        $logLevel = Level::Debug;
 }
 
 $logPath = env('APP_LOG_PATH',__DIR__.'/../storage/logs/log-'.date("Ymd").'.log');
