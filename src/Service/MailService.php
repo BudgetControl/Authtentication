@@ -12,8 +12,8 @@ class MailService {
 
     public function __construct()
     {
-        $dsn = new Dsn('aruba', env('MAIL_HOST'), env('MAIL_USERNAME'), env('MAIL_PASSWORD'));
-        $this->emailService = new EmailService($dsn);
+        $dsn = new Dsn(ENV('MAIL_DRIVER','mailhog'), env('MAIL_HOST'), env('MAIL_USER'), env('MAIL_PASSWORD'));
+        $this->emailService = new EmailService($dsn, env('MAIL_FROM_ADDRESS'));
     }
 
     public function send_signUpMail(string $to, string $name, string $token)
@@ -22,8 +22,9 @@ class MailService {
             'name' => $name,
             'confirm_link' =>  env('APP_URL', 'http://localhost') . '/app/auth/confirm/' . $token,
         ]);
+        $view->sign_upView();
 
-        $this->emailService->send(
+        $this->emailService->sendEmail(
             $to,
             'Sign Up Confirmation',
             $view

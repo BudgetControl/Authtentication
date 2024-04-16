@@ -12,6 +12,7 @@ namespace Budgetcontrol\Authtentication\Controller;
  * - 4. create default settings
  */
 
+use Budgetcontrol\Authtentication\Domain\Model\Token;
 use Budgetcontrol\Authtentication\Domain\Model\User;
 use Budgetcontrol\Authtentication\Service\BCConnectorService;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -19,6 +20,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Support\Facades\Validator;
 use Budgetcontrol\Authtentication\Traits\RegistersUsers;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SignUpController
@@ -58,27 +61,37 @@ class SignUpController
         ]);
 
         $data = $collection->only('name', 'email', 'password');
-
         try {
 
-            if ($cognito = $this->createCognitoUser($data)) {
+            if ($cognito = $this->createCognitoUser($data)) { //
 
                 //If successful, create the user in local db
                 $user = new User();
                 $user->name = $params["name"];
-                $user->email = $params["email"];
-                $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
+                $user->email = sha1($params["email"]);
+                $user->password = sha1($data['password']);
                 $user->save();
 
                 BCConnectorService::AddWorkspace_api($user->id);
 
+                $token = Token::create([
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'type' => 'signup'
+                ]);
+
+                // save token in cache
+                Cache::put($token->getToken(), $user->email, Carbon::now()->addMinutes(10));
+
                 $mail = new \Budgetcontrol\Authtentication\Service\MailService();
-                $mail->send_signUpMail($user->email, $user->name, $user->id);
+                $mail->send_signUpMail($params["email"], $user->name, $token->getToken());
+                
             }
             
         } catch (\Throwable $e) {
             //If an error occurs, delete the user from cognito
-            // AwsCognitoClient::deleteUser($params["email"]);
+            AwsCognitoClient::deleteUser($params["email"]);
+            User::find($user->id)->delete();
 
             Log::critical($e->getMessage());
             //Redirect to view

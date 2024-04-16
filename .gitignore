@@ -3,11 +3,12 @@
 .DS_Store
 /.htaccess
 .env
+.log
 
 /tmp/*
 /vendor/*
 /config/app.php
-
+/storage/*
 /tmp/cache/models/*
 !/tmp/cache/models/empty
 /tmp/cache/persistent/*
