@@ -3,6 +3,7 @@
 
 use \Illuminate\Support\Carbon as Date;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Validation\Validator;
 use Monolog\Level;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -60,9 +61,21 @@ $formatter = new \Monolog\Formatter\SyslogFormatter();
 $streamHandler->setFormatter($formatter);
 $logger->pushHandler($streamHandler);
 
+// config cahce
+require_once __DIR__ . '/../config/cache.php';
+$validator = new Validator(
+    new Illuminate\Translation\Translator(
+        new Illuminate\Translation\ArrayLoader(),
+        'en'
+    ),
+    [],
+    []
+);
+
 // Set up the Facade application
 Facade::setFacadeApplication([
     'log' => $logger,
     'date' => new Date(),
-    // 'cache' => $fileBasedStorage
+    'cache' => $cache,
+    'validator' => $validator
 ]);
