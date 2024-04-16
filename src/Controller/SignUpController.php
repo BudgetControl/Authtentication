@@ -12,17 +12,19 @@ namespace Budgetcontrol\Authtentication\Controller;
  * - 4. create default settings
  */
 
+use Budgetcontrol\Authtentication\Domain\Model\User;
 use Budgetcontrol\Authtentication\Service\BCConnectorService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Support\Facades\Validator;
-use Ellaisys\Cognito\Auth\RegistersUsers;
-
+use Budgetcontrol\Authtentication\Traits\RegistersUsers;
+use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Illuminate\Support\Facades\Log;
 
 class SignUpController
 {
     use RegistersUsers;
-    
+
     const URL_SIGNUP_CONFIRM = '/app/auth/confirm/';
     const PASSWORD_VALIDATION = '/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z]).{8,}$/';
 
@@ -57,29 +59,37 @@ class SignUpController
 
         $data = $collection->only('name', 'email', 'password');
 
-        if ($cognito = $this->createCognitoUser($data)) {
+        try {
 
-            try {
+            if ($cognito = $this->createCognitoUser($data)) {
+
                 //If successful, create the user in local db
-                $user = $this->userSignUp($request->toArray());
+                $user = new User();
+                $user->name = $params["name"];
+                $user->email = $params["email"];
+                $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
+                $user->save();
 
                 BCConnectorService::AddWorkspace_api($user->id);
 
                 $mail = new \Budgetcontrol\Authtentication\Service\MailService();
                 $mail->send_signUpMail($user->email, $user->name, $user->id);
-            } catch (\Throwable $e) {
-                CognitoClientService::init($request->email)->client->deleteUser($request->emai);
-                Log::critical($e->getMessage());
-                //Redirect to view
-                return response()->json([
-                    "success" => false,
-                    "error" => "An error occurred try again"
-                ], 400);
             }
+            
+        } catch (\Throwable $e) {
+            //If an error occurs, delete the user from cognito
+            // AwsCognitoClient::deleteUser($params["email"]);
+
+            Log::critical($e->getMessage());
+            //Redirect to view
+            return response([
+                "success" => false,
+                "error" => "An error occurred try again"
+            ], 400);
         }
 
         //Redirect to view
-        return response()->json([
+        return response([
             "success" => "Registration successfully",
             "details" => $cognito
         ], 201);

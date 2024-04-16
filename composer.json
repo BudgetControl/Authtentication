@@ -4,13 +4,13 @@
     "type": "none",
     "version": "1.0",
     "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.org"
-        },
         "budgetcontrol/sdk-mailer": {
             "type": "vcs",
             "url": "https://github.com/BudgetControl/SdkMailer.git"
+        },
+        "malirobot/aws-cognito": {
+            "type": "vcs",
+            "url": "https://github.com/mlabfactory/aws-cognito.git"
         }
     },
     "require": {
@@ -33,10 +33,10 @@
         "illuminate/filesystem": "^11.0",
         "firebase/php-jwt": "^6.10",
         "aws/aws-sdk-php": "^3.301",
-        "ellaisys/aws-cognito": "^1.2",
         "illuminate/cache": "11.x-dev",
         "illuminate/validation": "^11.3",
-        "budgetcontrol/sdk-mailer": "dev-develop"
+        "budgetcontrol/sdk-mailer": "dev-develop",
+        "malirobot/aws-cognito": "dev-php-v8"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",

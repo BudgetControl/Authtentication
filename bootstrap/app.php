@@ -72,10 +72,15 @@ $validator = new Validator(
     []
 );
 
+// AWS Cognito client
+require_once __DIR__ . '/../config/aws-cognito.php';
+
+
 // Set up the Facade application
 Facade::setFacadeApplication([
     'log' => $logger,
     'date' => new Date(),
     'cache' => $cache,
-    'validator' => $validator
+    'validator' => $validator,
+    'aws-cognito-client' => $awsCognitoClient
 ]);
