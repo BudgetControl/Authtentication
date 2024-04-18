@@ -4,9 +4,13 @@
     "type": "none",
     "version": "1.0",
     "repositories": {
-        "budgetcontrol/sdk-mailer": {
+        "budgetcontrol/libs-mailer": {
             "type": "vcs",
-            "url": "https://github.com/BudgetControl/SdkMailer.git"
+            "url": "https://github.com/BudgetControl/Libs_Mailer.git"
+        },
+        "budgetcontrol/libs-connector": {
+            "type": "vcs",
+            "url": "https://github.com/BudgetControl/Libs_BcConnector.git"
         },
         "malirobot/aws-cognito": {
             "type": "vcs",
@@ -35,8 +39,10 @@
         "aws/aws-sdk-php": "^3.301",
         "illuminate/cache": "11.x-dev",
         "illuminate/validation": "^11.3",
-        "budgetcontrol/sdk-mailer": "dev-develop",
-        "malirobot/aws-cognito": "dev-php-v8"
+        "budgetcontrol/libs-mailer": "dev-develop",
+        "malirobot/aws-cognito": "dev-php-v8",
+        "budgetcontrol/libs-connector": "dev-develop"
+
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
