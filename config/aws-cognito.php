@@ -20,5 +20,6 @@ $awsCognitoClient->setAppClientId($config['app_client_id']);
 $awsCognitoClient->setAppClientSecret($config['app_client_secret']);
 $awsCognitoClient->setRegion($config['region']);
 $awsCognitoClient->setUserPoolId($config['user_pool_id']);
+$awsCognitoClient->setAppName(env('APP_NAME'));
 
 $awsCognitoClient;

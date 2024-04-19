@@ -19,6 +19,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Support\Facades\Validator;
 use Budgetcontrol\Authtentication\Traits\RegistersUsers;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authtentication\Traits\AuthFlow;
 use Budgetcontrol\Connector\Factory\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -27,7 +28,7 @@ use stdClass;
 
 class SignUpController
 {
-    use RegistersUsers;
+    use RegistersUsers, AuthFlow;
 
     const URL_SIGNUP_CONFIRM = '/app/auth/confirm/';
     const PASSWORD_VALIDATION = '/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z]).{8,}$/';
@@ -71,6 +72,7 @@ class SignUpController
                 $user->name = $params["name"];
                 $user->email = sha1($params["email"]);
                 $user->password = sha1($data['password']);
+                $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
                 $user->save();
 
                 $wsPayload = [
@@ -84,21 +86,10 @@ class SignUpController
                     throw new \Exception("Error creating workspace");
                 }
 
-                $token = Token::create([
-                    'user_id' => $user->id,
-                    'user_email' => $user->email,
-                    'type' => 'signup'
-                ]);
-
-                $userData = new stdClass();
-                $userData->email = $params["email"];
-                $userData->password = $params['password'];
-                $userData->id = $user->id;
-                // save token in cache
-                Cache::put($token->getToken(), $userData, Carbon::now()->addMinutes(10));
+                $token =$this->generateToken($params, $user->id);
 
                 $mail = new \Budgetcontrol\Authtentication\Service\MailService();
-                $mail->send_signUpMail($params["email"], $user->name, $token->getToken());
+                $mail->send_signUpMail($params["email"], $user->name, $token);
             }
         } catch (\Throwable $e) {
             //If an error occurs, delete the user from cognito

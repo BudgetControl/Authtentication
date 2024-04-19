@@ -2,19 +2,19 @@
 
 namespace Budgetcontrol\Authtentication\Controller;
 
-use Firebase\JWT\JWK;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Illuminate\Support\Facades\Log;
-use Budgetcontrol\Authtentication\Domain\Model\User;
-use Psr\Http\Message\ResponseInterface as Response;
-use Budgetcontrol\Authtentication\Exception\AuthException;
-use Budgetcontrol\Authtentication\Service\AwsClientService;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Database\Capsule\Manager as DB;
+use Psr\Http\Message\ResponseInterface as Response;
+use Budgetcontrol\Authtentication\Domain\Model\User;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Budgetcontrol\Authtentication\Exception\AuthException;
+use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authtentication\Service\AwsClientService;
+use Budgetcontrol\Authtentication\Traits\AuthFlow;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController
 {
+    use AuthFlow;
 
     public function check(Request $request, Response $response, array $args)
     {
@@ -87,5 +87,66 @@ class AuthController
 
         $result = array_merge($user->toArray(), ['workspaces' => $workspace], ['current_ws' =>  $active], ['workspace_settings' => $settings[0]] );
         return response($result, 200);
+    }
+
+    /**
+     * Resets the password for a user.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route parameters.
+     * @return Response The updated HTTP response object.
+     */
+    public function resetPassword(Request $request, Response $response, array $args)
+    {
+        try {
+            Validator::validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:64|unique:users',
+                'password' => 'sometimes|confirmed|min:6|max:64|regex:' . SignUpController::PASSWORD_VALIDATION,
+            ]);
+        } catch (\Throwable $e) {
+            return response(['error' => $e->getMessage()], 400);
+        }
+
+        $email = $request->getParsedBody()['email'];
+        $newPassword = $request->getParsedBody()['password'];
+
+        $user = User::where('email', sha1($email))->first();
+        if (!$user) {
+            throw new AuthException('User not found', 404);
+        }
+
+        AwsCognitoClient::setUserPassword($email, $newPassword, true);
+        $user->password=sha1($newPassword);
+        $user->save();
+
+        return response([], 200);
+    }
+
+    /**
+     * Sends a verification email.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route arguments.
+     * @return void
+     */
+    public function sendVerifyEmail(Request $request, Response $response, array $args)
+    {
+        $email = $request->getParsedBody()['email'];
+        $user = User::where('email', sha1($email))->first();
+        if (!$user) {
+            throw new AuthException('User not found', 404);
+        }
+
+        $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
+
+        $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+        $mail->send_signUpMail($email, $user->name, $token);
+
+        return response([
+            'message' => 'Email sent'
+        ], 200);
     }
 }
