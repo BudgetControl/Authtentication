@@ -30,3 +30,4 @@
 /app/Config/database.php
 /vendors/*
 *.log
+storage/*
