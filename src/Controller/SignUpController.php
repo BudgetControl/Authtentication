@@ -48,7 +48,7 @@ class SignUpController
                 'password' => 'sometimes|confirmed|min:6|max:64|regex:' . self::PASSWORD_VALIDATION,
             ]);
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response(['error' => $e->getMessage()], 400);
         }
 
         $params = $request->getParsedBody();
@@ -76,7 +76,12 @@ class SignUpController
                     'name' => "Workspace",
                     'description' => "Default workspace",
                 ];
-                Workspace::init('POST', $wsPayload)->call( '/add', $user->id);
+                
+                /** @√ar \Budgetcontrol\Connector\Model\Response $connector */
+                $connector = Workspace::init('POST', $wsPayload)->call( '/add', $user->id);
+                if($connector->getStatusCode() != 201) {
+                    throw new \Exception("Error creating workspace");
+                }
 
                 $token = Token::create([
                     'user_id' => $user->id,
