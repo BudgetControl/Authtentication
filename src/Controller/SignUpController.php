@@ -92,7 +92,7 @@ class SignUpController
 
                 $userData = new stdClass();
                 $userData->email = $params["email"];
-                $userData->password = $data['password'];
+                $userData->password = $params['password'];
                 $userData->id = $user->id;
                 // save token in cache
                 Cache::put($token->getToken(), $userData, Carbon::now()->addMinutes(10));
@@ -140,6 +140,7 @@ class SignUpController
             AwsCognitoClient::setUserPassword($user->email, $user->password, true);
         } catch (\Throwable $e) {
             Log::critical($e->getMessage());
+            Cache::forget($token);
             return response(["error" => "Ops an error occurred"], 400);
         }
 
