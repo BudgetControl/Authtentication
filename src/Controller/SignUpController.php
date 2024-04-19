@@ -23,6 +23,7 @@ use Budgetcontrol\Connector\Factory\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use stdClass;
 
 class SignUpController
 {
@@ -76,10 +77,10 @@ class SignUpController
                     'name' => "Workspace",
                     'description' => "Default workspace",
                 ];
-                
+
                 /** @√ar \Budgetcontrol\Connector\Model\Response $connector */
-                $connector = Workspace::init('POST', $wsPayload)->call( '/add', $user->id);
-                if($connector->getStatusCode() != 201) {
+                $connector = Workspace::init('POST', $wsPayload)->call('/add', $user->id);
+                if ($connector->getStatusCode() != 201) {
                     throw new \Exception("Error creating workspace");
                 }
 
@@ -89,14 +90,16 @@ class SignUpController
                     'type' => 'signup'
                 ]);
 
+                $userData = new stdClass();
+                $userData->email = $params["email"];
+                $userData->password = $data['password'];
+                $userData->id = $user->id;
                 // save token in cache
-                Cache::put($token->getToken(), $user->email, Carbon::now()->addMinutes(10));
+                Cache::put($token->getToken(), $userData, Carbon::now()->addMinutes(10));
 
                 $mail = new \Budgetcontrol\Authtentication\Service\MailService();
                 $mail->send_signUpMail($params["email"], $user->name, $token->getToken());
-                
             }
-            
         } catch (\Throwable $e) {
             //If an error occurs, delete the user from cognito
             AwsCognitoClient::deleteUser($params["email"]);
@@ -115,5 +118,37 @@ class SignUpController
             "success" => "Registration successfully",
             "details" => $cognito
         ], 201);
+    }
+
+    public function confirmToken(Request $request, Response $response, array $args)
+    {
+        $token = $args['token'];
+
+        if (empty($token)) {
+            return response(["error" => "Invalid token"], 400);
+        }
+
+        $user = Cache::get($token);
+        if (empty($user)) {
+            Log::critical("User not found");
+            return response(["error" => "Ops an error occurred"], 400);
+        }
+
+        $password = $user->password;
+        try {
+            AwsCognitoClient::setUserEmailVerified($user->email);
+            AwsCognitoClient::setUserPassword($user->email, $user->password, true);
+        } catch (\Throwable $e) {
+            Log::critical($e->getMessage());
+            return response(["error" => "Ops an error occurred"], 400);
+        }
+
+        $user = User::find($user->id);
+        $user->email_verified_at = date('Y-m-d H:i:s');
+        $user->save();
+
+        Cache::forget($token);
+
+        return response([], 200);
     }
 }
