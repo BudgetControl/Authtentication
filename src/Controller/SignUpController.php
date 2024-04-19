@@ -14,12 +14,12 @@ namespace Budgetcontrol\Authtentication\Controller;
 
 use Budgetcontrol\Authtentication\Domain\Model\Token;
 use Budgetcontrol\Authtentication\Domain\Model\User;
-use Budgetcontrol\Authtentication\Service\BCConnectorService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Support\Facades\Validator;
 use Budgetcontrol\Authtentication\Traits\RegistersUsers;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Connector\Factory\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -72,7 +72,11 @@ class SignUpController
                 $user->password = sha1($data['password']);
                 $user->save();
 
-                BCConnectorService::AddWorkspace_api($user->id);
+                $wsPayload = [
+                    'name' => "Workspace",
+                    'description' => "Default workspace",
+                ];
+                Workspace::init('POST', $wsPayload)->call( '/add', $user->id);
 
                 $token = Token::create([
                     'user_id' => $user->id,

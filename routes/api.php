@@ -5,7 +5,7 @@
  */
 $app->get('/check', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':check');
 $app->get('/user-info', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':authUserInfo');
-$app->post('/register', \Budgetcontrol\Authtentication\Controller\SignUpController::class . ':signUp');
+$app->post('/sign-up', \Budgetcontrol\Authtentication\Controller\SignUpController::class . ':signUp');
 $app->get('/confirm/{token}', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':confirmToken');
 $app->post('/authenticate', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':authenticate');
 $app->post('/reset-password', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':resetPassword');
