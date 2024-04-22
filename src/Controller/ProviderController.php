@@ -9,6 +9,7 @@ use Budgetcontrol\Authtentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authtentication\Domain\Entity\Provider;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Illuminate\Support\Facades\Log;
 
 class ProviderController {
 
@@ -29,6 +30,7 @@ class ProviderController {
             $uri = $provider->$providerName(env('COGNITO_REDIRECT_URI'));
 
         } catch (\Throwable $e) {
+            Log::error($e->getMessage());
             return response([
                 'success' => false,
                 'message' => "Provider not found"
