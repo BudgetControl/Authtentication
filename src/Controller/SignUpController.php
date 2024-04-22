@@ -83,6 +83,7 @@ class SignUpController
                 /** @√ar \Budgetcontrol\Connector\Model\Response $connector */
                 $connector = Workspace::init('POST', $wsPayload)->call('/add', $user->id);
                 if ($connector->getStatusCode() != 201) {
+                    Log::critical("Error creating workspace");
                     throw new \Exception("Error creating workspace");
                 }
 
@@ -93,10 +94,10 @@ class SignUpController
             }
         } catch (\Throwable $e) {
             //If an error occurs, delete the user from cognito
+            Log::critical($e->getMessage());
             AwsCognitoClient::deleteUser($params["email"]);
             User::find($user->id)->delete();
 
-            Log::critical($e->getMessage());
             //Redirect to view
             return response([
                 "success" => false,
