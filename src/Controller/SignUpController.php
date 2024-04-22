@@ -72,6 +72,7 @@ class SignUpController
                 $user->name = $params["name"];
                 $user->email = sha1($params["email"]);
                 $user->password = sha1($data['password']);
+                $user->sub = $cognito['sub'];
                 $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
                 $user->save();
 

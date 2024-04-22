@@ -8,7 +8,6 @@ use Budgetcontrol\Authtentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authtentication\Exception\AuthException;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
-use Budgetcontrol\Authtentication\Service\AwsClientService;
 use Budgetcontrol\Authtentication\Traits\AuthFlow;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +18,6 @@ class AuthController
 
     public function check(Request $request, Response $response, array $args)
     {
-
         $authToken = $request->getHeader('Authorization')
             ? $request->getHeader('Authorization')[0]
             : null;
@@ -29,12 +27,17 @@ class AuthController
         }
         $authToken = str_replace('Bearer ', '', $authToken);
 
-        $decodedToken = AwsClientService::decodeAuthToken($authToken);
+        $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
         
         // Check if the token has expired
         if (isset($decodedToken['exp']) && $decodedToken['exp'] < time()) {
-            $refreshToken = new AwsClientService($decodedToken['username']);
-            $authToken = $refreshToken->refreshCognitoToken($decodedToken['refresh_token']);
+            try {
+                $refresh_token = Cache::get($decodedToken['sub'].'refresh_token');
+                $tokens = AwsCognitoClient::refreshAuthentication($decodedToken['username'], $refresh_token);
+                $authToken = $tokens['AccessToken'];
+            } catch (\Throwable $e) {
+                throw new AuthException('Token has expired', 401);
+            }
         }
 
         return response(
@@ -56,7 +59,7 @@ class AuthController
         
         $authToken = str_replace('Bearer ', '', $authToken);
 
-        $decodedToken = AwsClientService::decodeAuthToken($authToken);
+        $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
         $user = User::where("sub", $decodedToken['sub'])->first();
         $userId = $user->id;
 

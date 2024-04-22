@@ -107,8 +107,8 @@ class ProviderController {
             $user->save();
         }
 
-        Cache::put($user->uuid.'refresh_token', $content['RefreshToken'], Carbon::now()->addDays(30));
-        Cache::put($user->uuid.'id_token', $content['IdToken'], Carbon::now()->addDays(30));
+        Cache::put($user->sub.'refresh_token', $content['RefreshToken'], Carbon::now()->addDays(30));
+        Cache::put($user->sub.'id_token', $content['IdToken'], Carbon::now()->addDays(30));
             
         return $content['AccessToken'];
     }

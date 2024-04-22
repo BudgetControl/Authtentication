@@ -36,8 +36,8 @@ class LoginController
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
-        Cache::put($user->uuid.'refresh_token', $refreshToken, Carbon::now()->addDays(30));
-        Cache::put($user->uuid.'id_token', $refreshToken, Carbon::now()->addDays(30));
+        Cache::put($user->sub.'refresh_token', $refreshToken, Carbon::now()->addDays(30));
+        Cache::put($user->sub.'id_token', $refreshToken, Carbon::now()->addDays(30));
         
         return response([
             'success' => true,
