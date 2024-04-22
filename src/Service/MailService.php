@@ -30,4 +30,19 @@ class MailService {
             $view
         );
     }
+
+    public function send_resetPassowrdMail(string $to, string $name, string $token)
+    {
+        $view = new AuthMail([
+            'name' => $name,
+            'confirm_link' =>  env('APP_URL', 'http://localhost') . '/app/auth/reset-password/' . $token,
+        ]);
+        $view->reset_passwordView();
+
+        $this->emailService->sendEmail(
+            $to,
+            'Reset Password',
+            $view
+        );
+    }
 }

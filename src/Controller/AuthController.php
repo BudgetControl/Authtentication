@@ -10,6 +10,7 @@ use Budgetcontrol\Authtentication\Exception\AuthException;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
 use Budgetcontrol\Authtentication\Service\AwsClientService;
 use Budgetcontrol\Authtentication\Traits\AuthFlow;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController
@@ -111,15 +112,18 @@ class AuthController
 
         $email = $request->getParsedBody()['email'];
         $newPassword = $request->getParsedBody()['password'];
+        $token = $args['token'];
 
-        $user = User::where('email', sha1($email))->first();
-        if (!$user) {
-            throw new AuthException('User not found', 404);
+        if(!Cache::has($token)) {
+            throw new AuthException('Invalid token', 401);
         }
 
-        AwsCognitoClient::setUserPassword($email, $newPassword, true);
-        $user->password=sha1($newPassword);
-        $user->save();
+        $user = User::where('email', sha1($email))->first();
+        if ($user) {
+            AwsCognitoClient::setUserPassword($email, $newPassword, true);
+            $user->password=sha1($newPassword);
+            $user->save();
+        }
 
         return response([], 200);
     }
@@ -136,14 +140,34 @@ class AuthController
     {
         $email = $request->getParsedBody()['email'];
         $user = User::where('email', sha1($email))->first();
-        if (!$user) {
-            throw new AuthException('User not found', 404);
+        if ($user) {
+            $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
+            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail->send_signUpMail($email, $user->name, $token);
         }
 
-        $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
+        return response([
+            'message' => 'Email sent'
+        ], 200);
+    }
 
-        $mail = new \Budgetcontrol\Authtentication\Service\MailService();
-        $mail->send_signUpMail($email, $user->name, $token);
+    /**
+     * Sends a reset password email.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route parameters.
+     * @return void
+     */
+    public function sendResetPasswordMail(Request $request, Response $response, array $args)
+    {
+        $email = $request->getParsedBody()['email'];
+        $user = User::where('email', sha1($email))->first();
+        if ($user) {
+            $token = $this->generateToken(['email' => $email], $user->id, 'reset_password');
+            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail->send_resetPassowrdMail($email, $user->name, $token);
+        }
 
         return response([
             'message' => 'Email sent'
