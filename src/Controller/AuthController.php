@@ -26,7 +26,6 @@ class AuthController
             throw new AuthException('Missing Authorization header', 401);
         }
         $authToken = str_replace('Bearer ', '', $authToken);
-
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
         
         // Check if the token has expired
@@ -58,8 +57,8 @@ class AuthController
         }
         
         $authToken = str_replace('Bearer ', '', $authToken);
-
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
+
         $user = User::where("sub", $decodedToken['sub'])->first();
         $userId = $user->id;
 
@@ -67,7 +66,7 @@ class AuthController
         $workspace = DB::select(
             'select * from workspaces as w 
             inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-            where ws.workspace_id = ?',
+            where ws.user_id = ?',
             [$userId]
         );
 

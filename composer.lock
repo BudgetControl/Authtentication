@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.304.7",
+            "version": "3.305.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b01905670e952b5c5cdc4902973120f62a14a7f4"
+                "reference": "6992342acf7dd4501163c6cddabe76c74f2020ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b01905670e952b5c5cdc4902973120f62a14a7f4",
-                "reference": "b01905670e952b5c5cdc4902973120f62a14a7f4",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6992342acf7dd4501163c6cddabe76c74f2020ad",
+                "reference": "6992342acf7dd4501163c6cddabe76c74f2020ad",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.304.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.305.0"
             },
-            "time": "2024-04-18T18:12:29+00:00"
+            "time": "2024-04-22T18:07:07+00:00"
         },
         {
             "name": "brick/math",
@@ -1902,12 +1902,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "726f1c085be7ac2a719e1f6451d165a951b144ae"
+                "reference": "00b59ddee442749301850aab8aec62560fe1f6a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/726f1c085be7ac2a719e1f6451d165a951b144ae",
-                "reference": "726f1c085be7ac2a719e1f6451d165a951b144ae",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/00b59ddee442749301850aab8aec62560fe1f6a4",
+                "reference": "00b59ddee442749301850aab8aec62560fe1f6a4",
                 "shasum": ""
             },
             "require": {
@@ -1962,7 +1962,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-04-17T14:17:23+00:00"
+            "time": "2024-04-23T15:06:18+00:00"
         },
         {
             "name": "illuminate/events",
@@ -2311,12 +2311,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/validation.git",
-                "reference": "25eb990bd430958334e31db4be334e475d19479f"
+                "reference": "cc91f4cc2d45a4a5078d393e5e062fc9ab6df66d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/validation/zipball/25eb990bd430958334e31db4be334e475d19479f",
-                "reference": "25eb990bd430958334e31db4be334e475d19479f",
+                "url": "https://api.github.com/repos/illuminate/validation/zipball/cc91f4cc2d45a4a5078d393e5e062fc9ab6df66d",
+                "reference": "cc91f4cc2d45a4a5078d393e5e062fc9ab6df66d",
                 "shasum": ""
             },
             "require": {
@@ -2364,7 +2364,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-04-17T14:17:52+00:00"
+            "time": "2024-04-22T15:28:19+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -2517,12 +2517,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlabfactory/aws-cognito.git",
-                "reference": "0dee5233aaaca68c20b776fe852e52447b4f7dce"
+                "reference": "66a6b5245a1a893b8460ebe7667cf02b06bb4d88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/0dee5233aaaca68c20b776fe852e52447b4f7dce",
-                "reference": "0dee5233aaaca68c20b776fe852e52447b4f7dce",
+                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/66a6b5245a1a893b8460ebe7667cf02b06bb4d88",
+                "reference": "66a6b5245a1a893b8460ebe7667cf02b06bb4d88",
                 "shasum": ""
             },
             "require": {
@@ -2559,7 +2559,7 @@
             "support": {
                 "source": "https://github.com/mlabfactory/aws-cognito/tree/php-v8"
             },
-            "time": "2024-04-19T16:48:07+00:00"
+            "time": "2024-04-23T11:51:15+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2736,12 +2736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "82c28278c1c8f7b82dcdab25692237f052ffc8d8"
+                "reference": "7219739c4e01d4680c980545821733b6ed8ee880"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/82c28278c1c8f7b82dcdab25692237f052ffc8d8",
-                "reference": "82c28278c1c8f7b82dcdab25692237f052ffc8d8",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7219739c4e01d4680c980545821733b6ed8ee880",
+                "reference": "7219739c4e01d4680c980545821733b6ed8ee880",
                 "shasum": ""
             },
             "require": {
@@ -2835,7 +2835,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-05T09:58:10+00:00"
+            "time": "2024-04-18T16:35:06+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -3015,12 +3015,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/sodium_compat.git",
-                "reference": "102bcf2312dc21c16c7c93fd44a6d2a2e1343e26"
+                "reference": "bb312875dcdd20680419564fe42ba1d9564b9e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/102bcf2312dc21c16c7c93fd44a6d2a2e1343e26",
-                "reference": "102bcf2312dc21c16c7c93fd44a6d2a2e1343e26",
+                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/bb312875dcdd20680419564fe42ba1d9564b9e37",
+                "reference": "bb312875dcdd20680419564fe42ba1d9564b9e37",
                 "shasum": ""
             },
             "require": {
@@ -3091,9 +3091,9 @@
             ],
             "support": {
                 "issues": "https://github.com/paragonie/sodium_compat/issues",
-                "source": "https://github.com/paragonie/sodium_compat/tree/master"
+                "source": "https://github.com/paragonie/sodium_compat/tree/v1.x"
             },
-            "time": "2024-04-19T09:18:28+00:00"
+            "time": "2024-04-22T22:05:04+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -3898,12 +3898,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "30fbc7904fd6399c7eb62790dff499156cbf72a1"
+                "reference": "68e4e37db514e34f8086a5968e0e0fbbb182beb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/30fbc7904fd6399c7eb62790dff499156cbf72a1",
-                "reference": "30fbc7904fd6399c7eb62790dff499156cbf72a1",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/68e4e37db514e34f8086a5968e0e0fbbb182beb3",
+                "reference": "68e4e37db514e34f8086a5968e0e0fbbb182beb3",
                 "shasum": ""
             },
             "require": {
@@ -3983,7 +3983,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-15T21:28:04+00:00"
+            "time": "2024-04-22T21:35:15+00:00"
         },
         {
             "name": "robmorgan/phinx",
@@ -7361,12 +7361,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "12625c0c050db5a71d94ab8d599bf711673a41c3"
+                "reference": "861c76cb004214612fff67b35de1e6c76146309b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/12625c0c050db5a71d94ab8d599bf711673a41c3",
-                "reference": "12625c0c050db5a71d94ab8d599bf711673a41c3",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/861c76cb004214612fff67b35de1e6c76146309b",
+                "reference": "861c76cb004214612fff67b35de1e6c76146309b",
                 "shasum": ""
             },
             "require": {
@@ -7433,7 +7433,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-19T06:34:32+00:00"
+            "time": "2024-04-19T14:51:07+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -8401,12 +8401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3a3b102b74be72c1e1695368194c1efed0804178"
+                "reference": "4af9dd45fc93809d60039ae4184b4bde54e8c882"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3a3b102b74be72c1e1695368194c1efed0804178",
-                "reference": "3a3b102b74be72c1e1695368194c1efed0804178",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4af9dd45fc93809d60039ae4184b4bde54e8c882",
+                "reference": "4af9dd45fc93809d60039ae4184b4bde54e8c882",
                 "shasum": ""
             },
             "require": {
@@ -8494,7 +8494,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-19T12:16:01+00:00"
+            "time": "2024-04-23T13:44:45+00:00"
         },
         {
             "name": "sebastian/cli-parser",
