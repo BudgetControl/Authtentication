@@ -2,15 +2,16 @@
 
 namespace Budgetcontrol\Authtentication\Controller;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Capsule\Manager as DB;
+use Budgetcontrol\Authtentication\Traits\AuthFlow;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Authtentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authtentication\Exception\AuthException;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
-use Budgetcontrol\Authtentication\Traits\AuthFlow;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController
 {
@@ -89,6 +90,9 @@ class AuthController
         }
 
         $result = array_merge($user->toArray(), ['workspaces' => $workspace], ['current_ws' =>  $active], ['workspace_settings' => $settings[0]] );
+        // save in cache
+        Cache::put($decodedToken['sub'].'user_info', $result, Carbon::now()->addDays(1));
+        
         return response($result, 200);
     }
 

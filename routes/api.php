@@ -13,3 +13,4 @@ $app->post('/verify-email', \Budgetcontrol\Authtentication\Controller\AuthContro
 $app->put('/reset-password/{token}', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':resetPassword');
 $app->get('/authenticate/{provider}', \Budgetcontrol\Authtentication\Controller\ProviderController::class . ':authenticateProvider');
 $app->get('/authenticate/token/{provider}', \Budgetcontrol\Authtentication\Controller\ProviderController::class . ':providerToken');
+$app->get('/logout', \Budgetcontrol\Authtentication\Controller\AuthController::class . ':logout');

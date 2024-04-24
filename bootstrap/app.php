@@ -63,6 +63,8 @@ $logger->pushHandler($streamHandler);
 
 // config cahce
 require_once __DIR__ . '/../config/cache.php';
+
+// validator laravel
 $validator = new Validator(
     new Illuminate\Translation\Translator(
         new Illuminate\Translation\ArrayLoader(),
@@ -74,7 +76,6 @@ $validator = new Validator(
 
 // AWS Cognito client
 require_once __DIR__ . '/../config/aws-cognito.php';
-
 
 // Set up the Facade application
 Facade::setFacadeApplication([
