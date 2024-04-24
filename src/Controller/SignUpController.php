@@ -83,6 +83,10 @@ class SignUpController
 
                 /** @√ar \Budgetcontrol\Connector\Model\Response $connector */
                 $connector = Workspace::init('POST', $wsPayload)->call('/add', $user->id);
+                $workspace = $connector->getBody()['workspace'];
+                
+                Workspace::init('PATCH',[],[])->call('/'.$workspace['uuid'].'/activate', $user->id);
+                
                 if ($connector->getStatusCode() != 201) {
                     Log::critical("Error creating workspace");
                     throw new \Exception("Error creating workspace");
