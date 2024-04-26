@@ -75,7 +75,7 @@ class AuthController
         $settings = [];
         // get the current workspace
         foreach ($workspace as $value) {
-            if ($value->active == 1) {
+            if ($value->current == 1) {
                 $active = $value->uuid;
                 $currentWsId = $value->id;
                 $settings = DB::select(
