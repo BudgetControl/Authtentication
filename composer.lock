@@ -2517,12 +2517,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlabfactory/aws-cognito.git",
-                "reference": "66a6b5245a1a893b8460ebe7667cf02b06bb4d88"
+                "reference": "fad8284b78e49c389091ee7458805e812b09355b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/66a6b5245a1a893b8460ebe7667cf02b06bb4d88",
-                "reference": "66a6b5245a1a893b8460ebe7667cf02b06bb4d88",
+                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/fad8284b78e49c389091ee7458805e812b09355b",
+                "reference": "fad8284b78e49c389091ee7458805e812b09355b",
                 "shasum": ""
             },
             "require": {
@@ -2559,7 +2559,7 @@
             "support": {
                 "source": "https://github.com/mlabfactory/aws-cognito/tree/php-v8"
             },
-            "time": "2024-04-23T11:51:15+00:00"
+            "time": "2024-04-23T17:01:51+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -9552,7 +9552,8 @@
     "stability-flags": {
         "illuminate/cache": 20,
         "budgetcontrol/libs-mailer": 20,
-        "malirobot/aws-cognito": 20
+        "malirobot/aws-cognito": 20,
+        "predis/predis": 15
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -9560,5 +9561,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
