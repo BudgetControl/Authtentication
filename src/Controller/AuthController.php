@@ -2,23 +2,23 @@
 
 namespace Budgetcontrol\Authtentication\Controller;
 
-use Firebase\JWT\JWK;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Illuminate\Support\Facades\Log;
-use Budgetcontrol\Authtentication\Domain\Model\User;
-use Psr\Http\Message\ResponseInterface as Response;
-use Budgetcontrol\Authtentication\Exception\AuthException;
-use Budgetcontrol\Authtentication\Service\AwsClientService;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Capsule\Manager as DB;
+use Budgetcontrol\Authtentication\Traits\AuthFlow;
+use Psr\Http\Message\ResponseInterface as Response;
+use Budgetcontrol\Authtentication\Domain\Model\User;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Budgetcontrol\Authtentication\Exception\AuthException;
+use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
 
 class AuthController
 {
+    use AuthFlow;
 
     public function check(Request $request, Response $response, array $args)
     {
-
         $authToken = $request->getHeader('Authorization')
             ? $request->getHeader('Authorization')[0]
             : null;
@@ -27,13 +27,17 @@ class AuthController
             throw new AuthException('Missing Authorization header', 401);
         }
         $authToken = str_replace('Bearer ', '', $authToken);
-
-        $decodedToken = AwsClientService::decodeAuthToken($authToken);
+        $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
         
         // Check if the token has expired
         if (isset($decodedToken['exp']) && $decodedToken['exp'] < time()) {
-            $refreshToken = new AwsClientService($decodedToken['username']);
-            $authToken = $refreshToken->refreshCognitoToken($decodedToken['refresh_token']);
+            try {
+                $refresh_token = Cache::get($decodedToken['sub'].'refresh_token');
+                $tokens = AwsCognitoClient::refreshAuthentication($decodedToken['username'], $refresh_token);
+                $authToken = $tokens['AccessToken'];
+            } catch (\Throwable $e) {
+                throw new AuthException('Token has expired', 401);
+            }
         }
 
         return response(
@@ -54,8 +58,8 @@ class AuthController
         }
         
         $authToken = str_replace('Bearer ', '', $authToken);
+        $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
 
-        $decodedToken = AwsClientService::decodeAuthToken($authToken);
         $user = User::where("sub", $decodedToken['sub'])->first();
         $userId = $user->id;
 
@@ -63,7 +67,7 @@ class AuthController
         $workspace = DB::select(
             'select * from workspaces as w 
             inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-            where ws.workspace_id = ?',
+            where ws.user_id = ?',
             [$userId]
         );
 
@@ -86,6 +90,93 @@ class AuthController
         }
 
         $result = array_merge($user->toArray(), ['workspaces' => $workspace], ['current_ws' =>  $active], ['workspace_settings' => $settings[0]] );
+        // save in cache
+        Cache::put($decodedToken['sub'].'user_info', $result, Carbon::now()->addDays(1));
+        
         return response($result, 200);
+    }
+
+    /**
+     * Resets the password for a user.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route parameters.
+     * @return Response The updated HTTP response object.
+     */
+    public function resetPassword(Request $request, Response $response, array $args)
+    {
+        try {
+            Validator::validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:64|unique:users',
+                'password' => 'sometimes|confirmed|min:6|max:64|regex:' . SignUpController::PASSWORD_VALIDATION,
+            ]);
+        } catch (\Throwable $e) {
+            return response(['error' => $e->getMessage()], 400);
+        }
+
+        $email = $request->getParsedBody()['email'];
+        $newPassword = $request->getParsedBody()['password'];
+        $token = $args['token'];
+
+        if(!Cache::has($token)) {
+            throw new AuthException('Invalid token', 401);
+        }
+
+        $user = User::where('email', sha1($email))->first();
+        if ($user) {
+            AwsCognitoClient::setUserPassword($email, $newPassword, true);
+            $user->password=sha1($newPassword);
+            $user->save();
+        }
+
+        return response([], 200);
+    }
+
+    /**
+     * Sends a verification email.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route arguments.
+     * @return void
+     */
+    public function sendVerifyEmail(Request $request, Response $response, array $args)
+    {
+        $email = $request->getParsedBody()['email'];
+        $user = User::where('email', sha1($email))->first();
+        if ($user) {
+            $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
+            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail->send_signUpMail($email, $user->name, $token);
+        }
+
+        return response([
+            'message' => 'Email sent'
+        ], 200);
+    }
+
+    /**
+     * Sends a reset password email.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route parameters.
+     * @return void
+     */
+    public function sendResetPasswordMail(Request $request, Response $response, array $args)
+    {
+        $email = $request->getParsedBody()['email'];
+        $user = User::where('email', sha1($email))->first();
+        if ($user) {
+            $token = $this->generateToken(['email' => $email], $user->id, 'reset_password');
+            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail->send_resetPassowrdMail($email, $user->name, $token);
+        }
+
+        return response([
+            'message' => 'Email sent'
+        ], 200);
     }
 }

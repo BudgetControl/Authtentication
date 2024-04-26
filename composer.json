@@ -1,11 +1,24 @@
 {
-    "name": "budgetcontrol/workspace",
+    "name": "budgetcontrol/authtentication",
     "description": "defines the dependencies required for a PHP microservice managing workspaces in a Budget application",
     "type": "none",
+    "version": "1.0",
     "repositories": {
+        "budgetcontrol/libs-mailer": {
+            "type": "vcs",
+            "url": "https://github.com/BudgetControl/Libs_Mailer.git"
+        },
+        "budgetcontrol/libs-connector": {
+            "type": "vcs",
+            "url": "https://github.com/BudgetControl/Libs_BcConnector.git"
+        },
+        "malirobot/aws-cognito": {
+            "type": "vcs",
+            "url": "https://github.com/mlabfactory/aws-cognito.git"
+        }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "slim/slim": "^4.13",
         "doctrine/dbal": "^4.0",
         "symfony/var-dumper": "^7.0",
@@ -24,8 +37,12 @@
         "illuminate/filesystem": "^11.0",
         "firebase/php-jwt": "^6.10",
         "aws/aws-sdk-php": "^3.301",
-        "ellaisys/aws-cognito": "^1.2",
-        "illuminate/cache": "^11.0"
+        "illuminate/cache": "11.x-dev",
+        "illuminate/validation": "^11.3",
+        "budgetcontrol/libs-mailer": "dev-develop",
+        "malirobot/aws-cognito": "dev-php-v8",
+        "budgetcontrol/libs-connector": "v0.0.1",
+        "predis/predis": "^3.0@alpha"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
@@ -46,5 +63,5 @@
             "email": "marco.defelice@mlabfactory.it"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
