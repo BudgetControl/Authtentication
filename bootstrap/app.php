@@ -90,5 +90,5 @@ Facade::setFacadeApplication([
     'cache' => $cache,
     'validator' => $validator,
     'aws-cognito-client' => $awsCognitoClient,
-    'crypt' => $crypt
+    'encrypter' => $crypt
 ]);

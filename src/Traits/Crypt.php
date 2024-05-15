@@ -7,11 +7,11 @@ trait Crypt
 {
     public function encrypt(string $data): string
     {
-        return FacadesCrypt::crypt()->encrypt($data);
+        return FacadesCrypt::encrypt($data);
     }
 
     public function decrypt(string $data): string
     {
-        return FacadesCrypt::crypt()->decrypt($data);
+        return FacadesCrypt::decrypt($data);
     }
 }
