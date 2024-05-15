@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Budgetcontrol\Authtentication\Traits\RegistersUsers;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
 use Budgetcontrol\Authtentication\Traits\AuthFlow;
+use Budgetcontrol\Authtentication\Traits\Crypt;
 use Budgetcontrol\Connector\Factory\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -28,7 +29,7 @@ use stdClass;
 
 class SignUpController
 {
-    use RegistersUsers, AuthFlow;
+    use RegistersUsers, AuthFlow, Crypt;
 
     const URL_SIGNUP_CONFIRM = '/app/auth/confirm/';
     const PASSWORD_VALIDATION = '/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[a-z]).{8,}$/';
@@ -70,8 +71,8 @@ class SignUpController
                 //If successful, create the user in local db
                 $user = new User();
                 $user->name = $params["name"];
-                $user->email = sha1($params["email"]);
-                $user->password = sha1($data['password']);
+                $user->email = $this->encrypt($params["email"]);
+                $user->password = $this->encrypt($data['password']);
                 $user->sub = $cognito['sub'];
                 $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
                 $user->save();

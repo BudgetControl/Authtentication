@@ -74,6 +74,12 @@ $validator = new Validator(
     []
 );
 
+## Crypt
+$crypt = new \Illuminate\Encryption\Encrypter(
+    base64_decode(env('APP_KEY')),
+    'AES-256-CBC'
+);
+
 // AWS Cognito client
 require_once __DIR__ . '/../config/aws-cognito.php';
 
@@ -83,5 +89,6 @@ Facade::setFacadeApplication([
     'date' => new Date(),
     'cache' => $cache,
     'validator' => $validator,
-    'aws-cognito-client' => $awsCognitoClient
+    'aws-cognito-client' => $awsCognitoClient,
+    'crypt' => $crypt
 ]);
