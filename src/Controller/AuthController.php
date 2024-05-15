@@ -131,7 +131,7 @@ class AuthController
         $user = User::where('email', $this->decrypt($email))->first();
         if ($user) {
             AwsCognitoClient::setUserPassword($email, $newPassword, true);
-            $user->password=$this->encrypt($newPassword);
+            $user->password= $newPassword;
             $user->save();
         }
 

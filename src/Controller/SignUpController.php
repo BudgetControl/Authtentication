@@ -71,8 +71,8 @@ class SignUpController
                 //If successful, create the user in local db
                 $user = new User();
                 $user->name = $params["name"];
-                $user->email = $this->encrypt($params["email"]);
-                $user->password = $this->encrypt($data['password']);
+                $user->email = $params["email"];
+                $user->password = $data['password'];
                 $user->sub = $cognito['sub'];
                 $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
                 $user->save();
