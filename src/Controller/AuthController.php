@@ -56,6 +56,9 @@ class AuthController
         if(!$authToken) {
             throw new AuthException('Missing Authorization header', 401);
         }
+
+        //get Worksace UUID from the request
+        $workspaceUUID = $request->getHeader('X-WS')[0];
         
         $authToken = str_replace('Bearer ', '', $authToken);
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
@@ -75,11 +78,11 @@ class AuthController
         $settings = [];
         // get the current workspace
         foreach ($workspace as $value) {
-            if ($value->current == 1) {
+            if ($value->uuid == $workspaceUUID) {
                 $active = $value->uuid;
-                $currentWsId = $value->id;
+                $currentWsId = $value->workspace_id;
                 $settings = DB::select(
-                    "select * from workspace_settings where id = $currentWsId"
+                    "select * from workspace_settings where workspace_id = $currentWsId"
                 );
                 break;
             }
@@ -178,5 +181,26 @@ class AuthController
         return response([
             'message' => 'Email sent'
         ], 200);
+    }
+
+    /**
+     * Retrieves user information by email.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param array $args The route parameters.
+     * @return Response The HTTP response object.
+     */
+    public function userInfoByEmail(Request $request, Response $response, array $args)
+    {
+        $email = $args['email'];
+        $user = User::where('email', sha1($email))->first();
+        if (!$user) {
+            throw new AuthException('User not found', 404);
+        }
+
+        return response(
+            $user->toArray()
+        , 200);
     }
 }
