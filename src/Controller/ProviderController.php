@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authtentication\Domain\Entity\Provider;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
 use Illuminate\Support\Facades\Log;
+use malirobot\AwsCognito\Entity\Provider as EntityProvider;
 
 class ProviderController {
 
@@ -27,7 +28,8 @@ class ProviderController {
 
         try {
             $provider = AwsCognitoClient::provider();
-            $uri = $provider->$providerName(env('COGNITO_REDIRECT_URI'));
+            $providerUrl = EntityProvider::providerUrl($providerName);
+            $uri = $provider->$providerName($providerUrl);
 
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -89,7 +91,7 @@ class ProviderController {
     {
         $provider = AwsCognitoClient::provider();
         $params = $provider->getParams($provider);
-        $tokens =AwsCognitoClient::authenticateProvider($code, $params['redirect_uri']);
+        $tokens = AwsCognitoClient::authenticateProvider($code, $params['redirect_uri']);
 
         // Decode ID Token
         $content = AwsCognitoClient::decodeAccessToken($tokens['AccessToken']);
