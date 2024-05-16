@@ -33,7 +33,7 @@ class LoginController
             ], 401);
         }
 
-        $user = User::where('email', sha1($user))->first();
+        $user = User::where('email', sha1($user))->with('workspaces')->first();
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
@@ -44,6 +44,7 @@ class LoginController
             'success' => true,
             'message' => 'User authenticated',
             'token' => $userAuth['AccessToken'],
+            'workspaces' => $user->workspaces
         ]);
 
     }

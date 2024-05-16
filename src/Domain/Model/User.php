@@ -21,4 +21,10 @@ class User extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //relations with workspaces
+    public function workspaces()
+    {
+        return $this->hasMany(Workspace::class);
+    }
 }
