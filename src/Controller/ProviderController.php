@@ -62,7 +62,8 @@ class ProviderController {
         }
 
         try {
-            $token = $this->authenticate($request->getQueryParams()['code'],$provider);
+            $authResponse = $this->authenticate($request->getQueryParams()['code'],$provider);
+
         } catch (\Throwable $e) {
             return response([
                 'success' => false,
@@ -73,7 +74,8 @@ class ProviderController {
         return response([
             'success' => true,
             'message' => 'User authenticated',
-            'token' => $token,
+            'token' => $authResponse['token'],
+            'workspaces' => $authResponse['workspaces']
         ]);
     }
 
@@ -81,9 +83,9 @@ class ProviderController {
      * Authenticates the provided code.
      *
      * @param string $code The code to authenticate.
-     * @return string The authentication result.
+     * @return array The authentication result and workspace result.
      */
-    private function authenticate(string $code, string $provider): string
+    private function authenticate(string $code, string $provider): array
     {
         $provider = AwsCognitoClient::provider();
         $params = $provider->getParams($provider);
@@ -93,7 +95,7 @@ class ProviderController {
         $content = AwsCognitoClient::decodeAccessToken($tokens['AccessToken']);
         $userEmail = $content['email'];
 
-        $user = User::where('email', sha1($userEmail))->first();
+        $user = User::where('email', sha1($userEmail))->with('workspaces')->first();
         if(!$user) {
             $user = new User();
             $user->email = sha1($userEmail);
@@ -110,6 +112,9 @@ class ProviderController {
         Cache::put($user->sub.'refresh_token', $content['RefreshToken'], Carbon::now()->addDays(30));
         Cache::put($user->sub.'id_token', $content['IdToken'], Carbon::now()->addDays(30));
             
-        return $content['AccessToken'];
+        return [
+            'token' => $tokens['AccessToken'],
+            'workspaces' => $user->workspaces
+        ];
     }
 }
