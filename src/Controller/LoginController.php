@@ -4,6 +4,7 @@ namespace Budgetcontrol\Authtentication\Controller;
 
 use Carbon\Carbon;
 use Budgetcontrol\Authtentication\Facade\Cache;
+use Budgetcontrol\Authtentication\Traits\Crypt;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Authtentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -12,6 +13,7 @@ use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
 
 class LoginController
 {
+    use Crypt;
 
     public function authenticate(Request $request, Response $response, array $args)
     {
@@ -32,8 +34,8 @@ class LoginController
                 'message' => 'User not authenticated'
             ], 401);
         }
-
-        $user = User::where('email', sha1($user))->with('workspaces')->first();
+        $cryptedMail = $this->encrypt($user);
+        $user = User::where('email', $cryptedMail)->with('workspaces')->first();
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
