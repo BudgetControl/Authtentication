@@ -42,5 +42,11 @@ class User extends Model
     public function getPasswordAttribute($value)
     {
         return $this->decrypt($value);
+
+    }
+    
+    public function workspaces()
+    {
+        return $this->hasMany(Workspace::class);
     }
 }
