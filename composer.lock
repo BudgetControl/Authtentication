@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ad638e78778c1d11615e936035cd0b2",
+    "content-hash": "fa39dfe86197c0f7b2a2ecdef0d70ae4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1963,57 +1963,6 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2024-04-23T15:06:18+00:00"
-        },
-        {
-            "name": "illuminate/encryption",
-            "version": "11.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/encryption.git",
-                "reference": "48132abaffae8f5d95c3dd31be112e871232618d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/encryption/zipball/48132abaffae8f5d95c3dd31be112e871232618d",
-                "reference": "48132abaffae8f5d95c3dd31be112e871232618d",
-                "shasum": ""
-            },
-            "require": {
-                "ext-hash": "*",
-                "ext-mbstring": "*",
-                "ext-openssl": "*",
-                "illuminate/contracts": "^11.0",
-                "illuminate/support": "^11.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "11.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Illuminate\\Encryption\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Encryption package.",
-            "homepage": "https://laravel.com",
-            "support": {
-                "issues": "https://github.com/laravel/framework/issues",
-                "source": "https://github.com/laravel/framework"
-            },
-            "time": "2024-04-15T15:22:08+00:00"
         },
         {
             "name": "illuminate/events",

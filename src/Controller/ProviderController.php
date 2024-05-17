@@ -96,10 +96,10 @@ class ProviderController {
         $content = AwsCognitoClient::decodeAccessToken($tokens['AccessToken']);
         $userEmail = $content['email'];
 
-        $user = User::where('email', $this->decrypt($userEmail))->first();
+        $user = User::where('email', $this->encrypt($userEmail))->first();
         if(!$user) {
             $user = new User();
-            $user->email = $this->encrypt($userEmail);
+            $user->email = $userEmail;
             $user->name = $content['name'];
             $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
             $user->sub = $content['sub'];

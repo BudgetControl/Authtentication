@@ -128,7 +128,7 @@ class AuthController
             throw new AuthException('Invalid token', 401);
         }
 
-        $user = User::where('email', $this->decrypt($email))->first();
+        $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             AwsCognitoClient::setUserPassword($email, $newPassword, true);
             $user->password= $newPassword;
@@ -149,7 +149,7 @@ class AuthController
     public function sendVerifyEmail(Request $request, Response $response, array $args)
     {
         $email = $request->getParsedBody()['email'];
-        $user = User::where('email', $this->decrypt($email))->first();
+        $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
             $mail = new \Budgetcontrol\Authtentication\Service\MailService();
@@ -172,7 +172,7 @@ class AuthController
     public function sendResetPasswordMail(Request $request, Response $response, array $args)
     {
         $email = $request->getParsedBody()['email'];
-        $user = User::where('email', $this->decrypt($email))->first();
+        $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             $token = $this->generateToken(['email' => $email], $user->id, 'reset_password');
             $mail = new \Budgetcontrol\Authtentication\Service\MailService();
@@ -195,7 +195,7 @@ class AuthController
     public function userInfoByEmail(Request $request, Response $response, array $args)
     {
         $email = $args['email'];
-        $user = User::where('email', $this->decrypt($email))->first();
+        $user = User::where('email', $this->encrypt($email))->first();
         if (!$user) {
             throw new AuthException('User not found', 404);
         }

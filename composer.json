@@ -42,8 +42,7 @@
         "budgetcontrol/libs-mailer": "dev-develop",
         "malirobot/aws-cognito": "dev-php-v8",
         "budgetcontrol/libs-connector": "v0.0.1",
-        "predis/predis": "^3.0@alpha",
-        "illuminate/encryption": "11.x-dev"
+        "predis/predis": "^3.0@alpha"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",

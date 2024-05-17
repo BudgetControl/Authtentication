@@ -34,8 +34,8 @@ class LoginController
                 'message' => 'User not authenticated'
             ], 401);
         }
-
-        $user = User::where('email', $this->decrypt($user))->with('workspaces')->first();
+        $cryptedMail = $this->encrypt($user);
+        $user = User::where('email', $cryptedMail)->with('workspaces')->first();
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
