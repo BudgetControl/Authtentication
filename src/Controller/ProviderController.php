@@ -89,14 +89,14 @@ class ProviderController {
      * @param string $code The code to authenticate.
      * @return array The authentication result and workspace result.
      */
-    private function authenticate(string $code, string $provider): array
+    private function authenticate(string $code, string $providerName): array
     {
         $provider = AwsCognitoClient::provider();
-        $params = $provider->getParams($provider);
+        $params = $provider->getParams($providerName);
         $tokens = AwsCognitoClient::authenticateProvider($code, $params['redirect_uri']);
 
         // Decode ID Token
-        $content = AwsCognitoClient::decodeAccessToken($tokens['AccessToken']);
+        $content = AwsCognitoClient::decodeAccessToken($tokens->id_token);
         $userEmail = $content['email'];
         $user = User::where('email', $this->encrypt($userEmail))->with('workspaces')->first();
       
@@ -113,11 +113,11 @@ class ProviderController {
             $user->save();
         }
 
-        Cache::put($user->sub.'refresh_token', $content['RefreshToken'], Carbon::now()->addDays(30));
-        Cache::put($user->sub.'id_token', $content['IdToken'], Carbon::now()->addDays(30));
+        Cache::put($user->sub.'refresh_token', $content->refresh_token, Carbon::now()->addDays(30));
+        Cache::put($user->sub.'id_token', $content->id_token, Carbon::now()->addDays(30));
             
         return [
-            'token' => $tokens['AccessToken'],
+            'token' => $tokens->access_token,
             'workspaces' => $user->workspaces
         ];
     }

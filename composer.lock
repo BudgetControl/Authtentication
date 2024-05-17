@@ -2517,12 +2517,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlabfactory/aws-cognito.git",
-                "reference": "1f00ff686e4eda3d2f9bd5867bccde8c706ce3b4"
+                "reference": "483f846e2be1f690cb9b7e6b254c46a1fb5172da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/1f00ff686e4eda3d2f9bd5867bccde8c706ce3b4",
-                "reference": "1f00ff686e4eda3d2f9bd5867bccde8c706ce3b4",
+                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/483f846e2be1f690cb9b7e6b254c46a1fb5172da",
+                "reference": "483f846e2be1f690cb9b7e6b254c46a1fb5172da",
                 "shasum": ""
             },
             "require": {
@@ -2559,7 +2559,7 @@
             "support": {
                 "source": "https://github.com/mlabfactory/aws-cognito/tree/php-v8"
             },
-            "time": "2024-05-16T06:42:46+00:00"
+            "time": "2024-05-17T15:16:09+00:00"
         },
         {
             "name": "monolog/monolog",
