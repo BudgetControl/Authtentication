@@ -31,8 +31,7 @@ class ProviderController {
 
         try {
             $provider = AwsCognitoClient::provider();
-            $providerUrl = EntityProvider::providerUrl($providerName);
-            $uri = $provider->$providerName($providerUrl);
+            $uri = $provider->$providerName(env('COGNITO_GOOGLE_AUTH_URL'));
 
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
