@@ -11,6 +11,7 @@ use Budgetcontrol\Authtentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authtentication\Domain\Entity\Provider;
 use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use malirobot\AwsCognito\Entity\Provider as EntityProvider;
 
 class ProviderController {
 
@@ -30,7 +31,8 @@ class ProviderController {
 
         try {
             $provider = AwsCognitoClient::provider();
-            $uri = $provider->$providerName(env('COGNITO_REDIRECT_URI'));
+            $providerUrl = EntityProvider::providerUrl($providerName);
+            $uri = $provider->$providerName($providerUrl);
 
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -65,7 +67,8 @@ class ProviderController {
         }
 
         try {
-            $token = $this->authenticate($request->getQueryParams()['code'],$provider);
+            $authResponse = $this->authenticate($request->getQueryParams()['code'],$provider);
+
         } catch (\Throwable $e) {
             return response([
                 'success' => false,
@@ -76,7 +79,8 @@ class ProviderController {
         return response([
             'success' => true,
             'message' => 'User authenticated',
-            'token' => $token,
+            'token' => $authResponse['token'],
+            'workspaces' => $authResponse['workspaces']
         ]);
     }
 
@@ -84,19 +88,19 @@ class ProviderController {
      * Authenticates the provided code.
      *
      * @param string $code The code to authenticate.
-     * @return string The authentication result.
+     * @return array The authentication result and workspace result.
      */
-    private function authenticate(string $code, string $provider): string
+    private function authenticate(string $code, string $provider): array
     {
         $provider = AwsCognitoClient::provider();
         $params = $provider->getParams($provider);
-        $tokens =AwsCognitoClient::authenticateProvider($code, $params['redirect_uri']);
+        $tokens = AwsCognitoClient::authenticateProvider($code, $params['redirect_uri']);
 
         // Decode ID Token
         $content = AwsCognitoClient::decodeAccessToken($tokens['AccessToken']);
         $userEmail = $content['email'];
-
-        $user = User::where('email', $this->encrypt($userEmail))->first();
+        $user = User::where('email', $this->encrypt($userEmail))->with('workspaces')->first();
+      
         if(!$user) {
             $user = new User();
             $user->email = $userEmail;
@@ -113,6 +117,9 @@ class ProviderController {
         Cache::put($user->sub.'refresh_token', $content['RefreshToken'], Carbon::now()->addDays(30));
         Cache::put($user->sub.'id_token', $content['IdToken'], Carbon::now()->addDays(30));
             
-        return $content['AccessToken'];
+        return [
+            'token' => $tokens['AccessToken'],
+            'workspaces' => $user->workspaces
+        ];
     }
 }
