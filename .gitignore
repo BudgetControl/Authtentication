@@ -31,3 +31,4 @@
 /vendors/*
 *.log
 storage/*
+Test.php
