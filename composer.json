@@ -44,7 +44,7 @@
         "predis/predis": "2.2.2",
         "mlabfactory/libs-mailer": "v1.1.2-RC",
         "malirobot/aws-cognito": "v2.1",
-        "budgetcontrol/libs-connector": "dev-main"
+        "budgetcontrol/libs-connector": "v0.2.1"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
