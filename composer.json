@@ -1,22 +1,24 @@
 {
-    "name": "budgetcontrol/authtentication",
+    "name": "budgetcontrol/authentication",
     "description": "defines the dependencies required for a PHP microservice managing workspaces in a Budget application",
     "type": "none",
-    "version": "1.0",
-    "repositories": {
-        "budgetcontrol/libs-mailer": {
+    "repositories": [
+        {
             "type": "vcs",
-            "url": "https://github.com/BudgetControl/Libs_Mailer.git"
+            "url": "https://github.com/mlabfactory/Libs_Mailer.git"
         },
-        "budgetcontrol/libs-connector": {
+        {
             "type": "vcs",
             "url": "https://github.com/BudgetControl/Libs_BcConnector.git"
         },
-        "malirobot/aws-cognito": {
+        {
             "type": "vcs",
-            "url": "https://github.com/mlabfactory/aws-cognito.git"
+            "url": "https://github.com/mlabfactory/aws-cognito.git",
+            "options": {
+                "branch": "php-v8"
+            }
         }
-    },
+    ],
     "require": {
         "php": "^8.2",
         "slim/slim": "^4.13",
@@ -37,12 +39,12 @@
         "illuminate/filesystem": "^11.0",
         "firebase/php-jwt": "^6.10",
         "aws/aws-sdk-php": "^3.301",
-        "illuminate/cache": "11.x-dev",
+        "illuminate/cache": "^11.7",
         "illuminate/validation": "^11.3",
-        "budgetcontrol/libs-mailer": "dev-develop",
-        "malirobot/aws-cognito": "dev-php-v8",
-        "budgetcontrol/libs-connector": "v0.0.1",
-        "predis/predis": "^3.0@alpha"
+        "predis/predis": "2.2.2",
+        "mlabfactory/libs-mailer": "v1.1.2-RC",
+        "malirobot/aws-cognito": "v2.1",
+        "budgetcontrol/libs-connector": "v0.2"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
@@ -51,7 +53,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Budgetcontrol\\Authtentication\\": "src/"
+            "Budgetcontrol\\Authentication\\": "src/"
         },
         "files": [
             "config/helpers.php"
@@ -63,5 +65,6 @@
             "email": "marco.defelice@mlabfactory.it"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "RC",
+    "prefer-stable": true
 }
