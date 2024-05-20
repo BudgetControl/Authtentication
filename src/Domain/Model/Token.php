@@ -1,8 +1,8 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Domain\Model;
+namespace Budgetcontrol\Authentication\Domain\Model;
 
-use Budgetcontrol\Authtentication\Traits\Crypt;
+use Budgetcontrol\Authentication\Traits\Crypt;
 use Illuminate\Support\Facades\Cache;
 
 class Token

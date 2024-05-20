@@ -56,7 +56,7 @@ switch(env('APP_LOG_LEVEL','debug')) {
 
 $logPath = env('APP_LOG_PATH',__DIR__.'/../storage/logs/log-'.date("Ymd").'.log');
 $streamHandler = new \Monolog\Handler\StreamHandler($logPath, $logLevel);
-$logger = new \Monolog\Logger('MS-AUTHTENTICATION');
+$logger = new \Monolog\Logger('MS-Authentication');
 $formatter = new \Monolog\Formatter\SyslogFormatter();
 $streamHandler->setFormatter($formatter);
 $logger->pushHandler($streamHandler);

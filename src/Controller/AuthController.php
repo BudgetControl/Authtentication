@@ -1,18 +1,18 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Controller;
+namespace Budgetcontrol\Authentication\Controller;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Capsule\Manager as DB;
-use Budgetcontrol\Authtentication\Traits\AuthFlow;
+use Budgetcontrol\Authentication\Traits\AuthFlow;
 use Psr\Http\Message\ResponseInterface as Response;
-use Budgetcontrol\Authtentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Budgetcontrol\Authtentication\Exception\AuthException;
-use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
-use Budgetcontrol\Authtentication\Traits\Crypt;
+use Budgetcontrol\Authentication\Exception\AuthException;
+use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authentication\Traits\Crypt;
 
 class AuthController
 {
@@ -152,7 +152,7 @@ class AuthController
         $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             $token = $this->generateToken(['email' => $email], $user->id, 'verify_email');
-            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail = new \Budgetcontrol\Authentication\Service\MailService();
             $mail->send_signUpMail($email, $user->name, $token);
         }
 
@@ -175,7 +175,7 @@ class AuthController
         $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             $token = $this->generateToken(['email' => $email], $user->id, 'reset_password');
-            $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+            $mail = new \Budgetcontrol\Authentication\Service\MailService();
             $mail->send_resetPassowrdMail($email, $user->name, $token);
         }
 

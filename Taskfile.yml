@@ -6,5 +6,5 @@ tasks:
     desc: Build dev enviroment
     cmds:
       - docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.db.yml up -d
-      - docker container cp bin/apache/default.conf budgetcontrol-ms-authtentication:/etc/apache2/sites-available/budgetcontrol.cloud.conf
-      - docker container exec budgetcontrol-ms-authtentication service apache2 restart
+      - docker container cp bin/apache/default.conf budgetcontrol-ms-Authentication:/etc/apache2/sites-available/budgetcontrol.cloud.conf
+      - docker container exec budgetcontrol-ms-Authentication service apache2 restart

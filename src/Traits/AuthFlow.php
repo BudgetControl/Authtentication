@@ -1,15 +1,15 @@
 <?php
-namespace Budgetcontrol\Authtentication\Traits;
+namespace Budgetcontrol\Authentication\Traits;
 
 use Illuminate\Support\Carbon;
-use Budgetcontrol\Authtentication\Facade\Cache;
-use Budgetcontrol\Authtentication\Domain\Model\User;
-use Budgetcontrol\Authtentication\Domain\Model\Token;
+use Budgetcontrol\Authentication\Facade\Cache;
+use Budgetcontrol\Authentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Model\Token;
 
 trait AuthFlow {
 
     /**
-     * Generates a token for authentication.
+     * Generates a token for Authentication.
      *
      * @param array $params The parameters for generating the token.
      * @param int $userId The ID of the user.

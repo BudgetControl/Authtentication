@@ -1,6 +1,6 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Controller;
+namespace Budgetcontrol\Authentication\Controller;
 
 /** ########## DOCUMENTATION
  * 
@@ -12,15 +12,15 @@ namespace Budgetcontrol\Authtentication\Controller;
  * - 4. create default settings
  */
 
-use Budgetcontrol\Authtentication\Domain\Model\Token;
-use Budgetcontrol\Authtentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Model\Token;
+use Budgetcontrol\Authentication\Domain\Model\User;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Support\Facades\Validator;
-use Budgetcontrol\Authtentication\Traits\RegistersUsers;
-use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
-use Budgetcontrol\Authtentication\Traits\AuthFlow;
-use Budgetcontrol\Authtentication\Traits\Crypt;
+use Budgetcontrol\Authentication\Traits\RegistersUsers;
+use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authentication\Traits\AuthFlow;
+use Budgetcontrol\Authentication\Traits\Crypt;
 use Budgetcontrol\Connector\Factory\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -95,7 +95,7 @@ class SignUpController
 
                 $token =$this->generateToken($params, $user->id);
 
-                $mail = new \Budgetcontrol\Authtentication\Service\MailService();
+                $mail = new \Budgetcontrol\Authentication\Service\MailService();
                 $mail->send_signUpMail($params["email"], $user->name, $token);
             }
         } catch (\Throwable $e) {

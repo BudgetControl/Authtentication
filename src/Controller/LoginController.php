@@ -1,15 +1,15 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Controller;
+namespace Budgetcontrol\Authentication\Controller;
 
 use Carbon\Carbon;
-use Budgetcontrol\Authtentication\Facade\Cache;
-use Budgetcontrol\Authtentication\Traits\Crypt;
+use Budgetcontrol\Authentication\Facade\Cache;
+use Budgetcontrol\Authentication\Traits\Crypt;
 use Psr\Http\Message\ResponseInterface as Response;
-use Budgetcontrol\Authtentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Budgetcontrol\Authtentication\Exception\AuthException;
-use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authentication\Exception\AuthException;
+use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
 
 class LoginController
 {

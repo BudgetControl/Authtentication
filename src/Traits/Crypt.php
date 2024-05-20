@@ -1,5 +1,5 @@
 <?php
-namespace Budgetcontrol\Authtentication\Traits;
+namespace Budgetcontrol\Authentication\Traits;
 
 use Illuminate\Support\Facades\Crypt as FacadesCrypt;
 

@@ -1,5 +1,5 @@
 <?php
-namespace Budgetcontrol\Authtentication\Service;
+namespace Budgetcontrol\Authentication\Service;
 
 use Budgetcontrol\SdkMailer\Domain\Transport\ArubaSmtp;
 use Budgetcontrol\SdkMailer\Service\EmailService;

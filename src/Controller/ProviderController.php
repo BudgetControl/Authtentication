@@ -1,16 +1,16 @@
 <?php
-namespace Budgetcontrol\Authtentication\Controller;
+namespace Budgetcontrol\Authentication\Controller;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Budgetcontrol\Authtentication\Facade\Cache;
-use Budgetcontrol\Authtentication\Traits\Crypt;
+use Budgetcontrol\Authentication\Facade\Cache;
+use Budgetcontrol\Authentication\Traits\Crypt;
 use Psr\Http\Message\ResponseInterface as Response;
-use Budgetcontrol\Authtentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Budgetcontrol\Authtentication\Domain\Entity\Provider;
-use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authentication\Domain\Entity\Provider;
+use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
 use malirobot\AwsCognito\Entity\Provider as EntityProvider;
 
 class ProviderController {
@@ -87,7 +87,7 @@ class ProviderController {
      * Authenticates the provided code.
      *
      * @param string $code The code to authenticate.
-     * @return array The authentication result and workspace result.
+     * @return array The Authentication result and workspace result.
      */
     private function authenticate(string $code, string $providerName): array
     {

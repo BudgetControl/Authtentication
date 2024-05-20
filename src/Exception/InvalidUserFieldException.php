@@ -1,6 +1,6 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Exception;
+namespace Budgetcontrol\Authentication\Exception;
 
 use Throwable;
 
