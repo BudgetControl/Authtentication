@@ -1,5 +1,5 @@
 {
-    "name": "budgetcontrol/Authentication",
+    "name": "budgetcontrol/authentication",
     "description": "defines the dependencies required for a PHP microservice managing workspaces in a Budget application",
     "type": "none",
     "repositories": [

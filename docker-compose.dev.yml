@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
     bemodule:
-      container_name: budgetcontrol-ms-Authentication
+      container_name: budgetcontrol-ms-authentication
       image: budgetcontrol/core:xdebug-v2.2
       ports:
         - "8083:80"

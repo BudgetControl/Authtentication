@@ -2502,7 +2502,7 @@
             "homepage": "https://github.com/malirobot/aws-cognito",
             "keywords": [
                 "api",
-                "Authentication",
+                "authentication",
                 "aws",
                 "cognito",
                 "php"
