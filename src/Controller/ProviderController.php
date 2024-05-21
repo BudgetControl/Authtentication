@@ -99,22 +99,23 @@ class ProviderController {
         $content = AwsCognitoClient::decodeAccessToken($tokens->id_token);
         $userEmail = $content['email'];
         $user = User::where('email', $this->encrypt($userEmail))->with('workspaces')->first();
+        $sub = $content['sub'];
       
         if(!$user) {
             $user = new User();
             $user->email = $userEmail;
             $user->name = $content['name'];
             $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-            $user->sub = $content['sub'];
+            $user->sub = $sub;
             $user->save();
         } else {
             // Update user information sub
-            $user->sub = $content['sub'];
+            $user->sub = $sub;
             $user->save();
         }
 
-        Cache::put($user->sub.'refresh_token', $content->refresh_token, Carbon::now()->addDays(30));
-        Cache::put($user->sub.'id_token', $content->id_token, Carbon::now()->addDays(30));
+        Cache::put($sub.'refresh_token', $content->refresh_token, Carbon::now()->addDays(30));
+        Cache::put($sub.'id_token', $content->id_token, Carbon::now()->addDays(30));
             
         return [
             'token' => $tokens->access_token,
