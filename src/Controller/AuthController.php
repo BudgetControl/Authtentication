@@ -64,7 +64,13 @@ class AuthController
         $authToken = str_replace('Bearer ', '', $authToken);
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
 
-        $user = User::where("sub", $decodedToken['sub'])->first();
+        $idToken = Cache::get($decodedToken['sub'].'id_token');
+        if(empty($idToken)) {
+            throw new AuthException('Invalid id token token', 401);
+        }
+        $decodedIdToken = AwsCognitoClient::decodeAccessToken($idToken);
+
+        $user = User::where("mail", $decodedIdToken['mail'])->first();
         $userId = $user->id;
 
         $user = User::find($userId);
