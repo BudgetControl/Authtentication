@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
     bemodule:
-      container_name: budgetcontrol-ms-authtentication
+      container_name: budgetcontrol-ms-authentication
       image: budgetcontrol/core:v2.2
       volumes:
         - ./:/var/www/workdir

@@ -1,6 +1,6 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Facade;
+namespace Budgetcontrol\Authentication\Facade;
 
 use Illuminate\Support\Facades\Facade;
 

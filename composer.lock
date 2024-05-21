@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d7445ecafbeb960a3f8d052b4ccb4b6",
+    "content-hash": "2ef45c00a8bbf372d6cfbdb137bef2fc",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -217,16 +217,16 @@
         },
         {
             "name": "budgetcontrol/libs-connector",
-            "version": "v0.2",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BudgetControl/Libs_BcConnector.git",
-                "reference": "bb9e577a9f9615c5141bdc618adb5f5608254bda"
+                "reference": "4aeffc7db333f0e6483983607e9b153d5dc489bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BudgetControl/Libs_BcConnector/zipball/bb9e577a9f9615c5141bdc618adb5f5608254bda",
-                "reference": "bb9e577a9f9615c5141bdc618adb5f5608254bda",
+                "url": "https://api.github.com/repos/BudgetControl/Libs_BcConnector/zipball/4aeffc7db333f0e6483983607e9b153d5dc489bb",
+                "reference": "4aeffc7db333f0e6483983607e9b153d5dc489bb",
                 "shasum": ""
             },
             "require": {
@@ -245,10 +245,7 @@
             "autoload": {
                 "psr-4": {
                     "Budgetcontrol\\Connector\\": "src/"
-                },
-                "files": [
-                    "config/helpers.php"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -261,10 +258,10 @@
             ],
             "description": "defines the dependencies required for a PHP library in a Budget control application",
             "support": {
-                "source": "https://github.com/BudgetControl/Libs_BcConnector/tree/v0.2",
+                "source": "https://github.com/BudgetControl/Libs_BcConnector/tree/v0.2.1",
                 "issues": "https://github.com/BudgetControl/Libs_BcConnector/issues"
             },
-            "time": "2024-05-20T08:21:13+00:00"
+            "time": "2024-05-20T09:28:54+00:00"
         },
         {
             "name": "cakephp/chronos",

@@ -1,9 +1,9 @@
 <?php
 
-namespace Budgetcontrol\Authtentication\Traits;
+namespace Budgetcontrol\Authentication\Traits;
 
     use Illuminate\Support\Facades\Log;
-use Budgetcontrol\Authtentication\Facade\AwsCognitoClient;
+use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
 
 trait RegistersUsers
 {
@@ -45,7 +45,7 @@ trait RegistersUsers
                 } else {
                     Log::error('RegistersUsers:createCognitoUser:InvalidUserFieldException');
                     Log::error("The configured user field {$userField} is not provided in the request.");
-                    throw new \Budgetcontrol\Authtentication\Exception\InvalidUserFieldException("The configured user field {$userField} is not provided in the request.");
+                    throw new \Budgetcontrol\Authentication\Exception\InvalidUserFieldException("The configured user field {$userField} is not provided in the request.");
                 } //End if
             } //End if
         } //Loop ends

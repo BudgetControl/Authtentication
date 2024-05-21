@@ -1,5 +1,5 @@
 <?php
-namespace Budgetcontrol\Authtentication\Exception;
+namespace Budgetcontrol\Authentication\Exception;
 
 class AuthException extends \Exception
 {
