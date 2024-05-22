@@ -5,10 +5,10 @@ namespace Budgetcontrol\Authentication\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Capsule\Manager as DB;
 use Budgetcontrol\Authentication\Traits\AuthFlow;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Authentication\Domain\Model\User;
+use Budgetcontrol\Authentication\Domain\Repository\AuthRepository;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authentication\Exception\AuthException;
 use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
@@ -50,6 +50,7 @@ class AuthController
 
     public function authUserInfo(Request $request, Response $response, array $args)
     {   
+        $repository = new AuthRepository();
         $authToken = $request->getHeader('Authorization')
             ? $request->getHeader('Authorization')[0]
             : null;
@@ -74,25 +75,20 @@ class AuthController
         $userId = $user->id;
 
         $user = User::find($userId);
-        $workspace = DB::select(
-            'select * from workspaces as w 
-            inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-            where ws.user_id = ?',
-            [$userId]
-        );
+        $workspace = $repository->workspaces($userId);
 
         $active = '';
         $settings = [];
         // get the current workspace
         foreach ($workspace as $value) {
+            $sharedWith = $repository->workspace_share_info($value->id);
             if ($value->uuid == $workspaceUUID) {
                 $active = $value->uuid;
                 $currentWsId = $value->workspace_id;
-                $settings = DB::select(
-                    "select * from workspace_settings where workspace_id = $currentWsId"
-                );
+                $settings = $repository->workspace_settings($currentWsId);
                 break;
             }
+            $value->shareWith = $sharedWith;
         }
 
         if(empty($settings)) {
