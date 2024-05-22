@@ -24,7 +24,7 @@ class LoginController
             $userAuth = AwsCognitoClient::setBoolClientSecret()->authenticate($user, $password);
 
             // decode auth token
-            $decodedToken = AwsCognitoClient::decodeAccessToken($userAuth->access_tokne);
+            $decodedToken = AwsCognitoClient::decodeAccessToken($userAuth['AccessToken']);
             $sub = $decodedToken['sub'];
 
             if (!empty($userAuth['error'])) {
@@ -46,8 +46,10 @@ class LoginController
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
+        $idToken = $userAuth['IdToken'];
+
         Cache::put($sub.'refresh_token', $refreshToken, Carbon::now()->addDays(30));
-        Cache::put($sub.'id_token', $refreshToken, Carbon::now()->addDays(30));
+        Cache::put($sub.'id_token', $idToken, Carbon::now()->addDays(30));
         
         return response([
             'success' => true,

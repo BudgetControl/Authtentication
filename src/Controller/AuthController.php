@@ -70,7 +70,7 @@ class AuthController
         }
         $decodedIdToken = AwsCognitoClient::decodeAccessToken($idToken);
 
-        $user = User::where("mail", $decodedIdToken['mail'])->first();
+        $user = User::where("email", $decodedIdToken['mail'])->first();
         $userId = $user->id;
 
         $user = User::find($userId);
