@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authentication\Exception\AuthException;
 use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
 use Budgetcontrol\Authentication\Traits\Crypt;
+use League\Container\Exception\NotFoundException;
 
 class AuthController
 {
@@ -23,17 +24,17 @@ class AuthController
         $authToken = $request->getHeader('Authorization')
             ? $request->getHeader('Authorization')[0]
             : null;
-        
-        if(!$authToken) {
+
+        if (!$authToken) {
             throw new AuthException('Missing Authorization header', 401);
         }
         $authToken = str_replace('Bearer ', '', $authToken);
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
-        
+
         // Check if the token has expired
         if (isset($decodedToken['exp']) && $decodedToken['exp'] < time()) {
             try {
-                $refresh_token = Cache::get($decodedToken['sub'].'refresh_token');
+                $refresh_token = Cache::get($decodedToken['sub'] . 'refresh_token');
                 $tokens = AwsCognitoClient::refreshAuthentication($decodedToken['username'], $refresh_token);
                 $authToken = $tokens['AccessToken'];
             } catch (\Throwable $e) {
@@ -49,30 +50,34 @@ class AuthController
     }
 
     public function authUserInfo(Request $request, Response $response, array $args)
-    {   
+    {
         $repository = new AuthRepository();
         $authToken = $request->getHeader('Authorization')
             ? $request->getHeader('Authorization')[0]
             : null;
-        
-        if(!$authToken) {
+
+        if (!$authToken) {
             throw new AuthException('Missing Authorization header', 401);
         }
 
         //get Worksace UUID from the request
         $workspaceUUID = $request->getHeader('X-WS')[0];
-        
+
         $authToken = str_replace('Bearer ', '', $authToken);
         $decodedToken = AwsCognitoClient::decodeAccessToken($authToken);
 
-        $idToken = Cache::get($decodedToken['sub'].'id_token');
-        if(empty($idToken)) {
+        $idToken = Cache::get($decodedToken['sub'] . 'id_token');
+        if (empty($idToken)) {
             throw new AuthException('Invalid id token token', 401);
         }
         $decodedIdToken = AwsCognitoClient::decodeAccessToken($idToken);
 
-        $user = User::where("email", $decodedIdToken['mail'])->first();
+        $user = User::where("email", $this->encrypt($decodedIdToken['email']))->first();
         $userId = $user->id;
+
+        if (is_null($userId)) {
+            throw new NotFoundException("User not found", 404);
+        }
 
         $user = User::find($userId);
         $workspace = $repository->workspaces($userId);
@@ -80,25 +85,30 @@ class AuthController
         $active = '';
         $settings = [];
         // get the current workspace
+        $sharedWith = [];
         foreach ($workspace as $value) {
-            $sharedWith = $repository->workspace_share_info($value->id);
+            $sharedWith = $repository->workspace_share_info($value->workspace_id);
             if ($value->uuid == $workspaceUUID) {
                 $active = $value->uuid;
                 $currentWsId = $value->workspace_id;
                 $settings = $repository->workspace_settings($currentWsId);
-                break;
             }
-            $value->shareWith = $sharedWith;
         }
 
-        if(empty($settings)) {
+        if (empty($settings)) {
             throw new AuthException('Workspace settings not found', 404);
         }
 
-        $result = array_merge($user->toArray(), ['workspaces' => $workspace], ['current_ws' =>  $active], ['workspace_settings' => $settings[0]] );
+        $result = array_merge(
+            $user->toArray(),
+            ['workspaces' => $workspace],
+            ['current_ws' =>  $active],
+            ['workspace_settings' => $settings[0]],
+            ['shared_with' => $sharedWith]
+        );
         // save in cache
-        Cache::put($decodedToken['sub'].'user_info', $result, Carbon::now()->addDays(1));
-        
+        Cache::put($decodedToken['sub'] . 'user_info', $result, Carbon::now()->addDays(1));
+
         return response($result, 200);
     }
 
@@ -126,14 +136,14 @@ class AuthController
         $newPassword = $request->getParsedBody()['password'];
         $token = $args['token'];
 
-        if(!Cache::has($token)) {
+        if (!Cache::has($token)) {
             throw new AuthException('Invalid token', 401);
         }
 
         $user = User::where('email', $this->encrypt($email))->first();
         if ($user) {
             AwsCognitoClient::setUserPassword($email, $newPassword, true);
-            $user->password= $newPassword;
+            $user->password = $newPassword;
             $user->save();
         }
 
@@ -203,7 +213,8 @@ class AuthController
         }
 
         return response(
-            $user->toArray()
-        , 200);
+            $user->toArray(),
+            200
+        );
     }
 }

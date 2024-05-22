@@ -6,8 +6,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Budgetcontrol\Authentication\Facade\Cache;
 use Budgetcontrol\Authentication\Traits\Crypt;
-use Psr\Http\Message\ResponseInterface as Response;
+use League\Container\Exception\NotFoundException;
 use Budgetcontrol\Authentication\Domain\Model\User;
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Authentication\Domain\Entity\Provider;
 use Budgetcontrol\Authentication\Facade\AwsCognitoClient;
@@ -100,6 +101,10 @@ class ProviderController {
         $userEmail = $content['email'];
         $user = User::where('email', $this->encrypt($userEmail))->with('workspaces')->first();
         $sub = $content['sub'];
+
+        if(empty($user)) {
+            throw new NotFoundException("User not found", 404);
+        }
       
         if(!$user) {
             $user = new User();
@@ -114,8 +119,8 @@ class ProviderController {
             $user->save();
         }
 
-        Cache::put($sub.'refresh_token', $content->refresh_token, Carbon::now()->addDays(30));
-        Cache::put($sub.'id_token', $content->id_token, Carbon::now()->addDays(30));
+        Cache::put($sub.'refresh_token', $tokens->refresh_token, Carbon::now()->addDays(30));
+        Cache::put($sub.'id_token', $tokens->id_token, Carbon::now()->addDays(30));
             
         return [
             'token' => $tokens->access_token,
