@@ -27,13 +27,16 @@ class AuthRepository {
     public function workspace_share_info(int $workspaceId)
     {
         $results = DB::select(
-            "select email, username from users as w
+            "select email, name from users as w
             inner join workspaces_users_mm as ws on ws.user_id = w.id
             where ws.workspace_id = $workspaceId;"
         );
 
-        foreach ($results as $result) {
+        foreach ($results as $key => $result) {
             $result->email = $this->decrypt($result->email);
+            if($result->email === false) {
+                unset($results[$key]);
+            }
         }
 
         return $results;

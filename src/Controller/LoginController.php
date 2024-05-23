@@ -22,6 +22,11 @@ class LoginController
 
         try {
             $userAuth = AwsCognitoClient::setBoolClientSecret()->authenticate($user, $password);
+
+            // decode auth token
+            $decodedToken = AwsCognitoClient::decodeAccessToken($userAuth['AccessToken']);
+            $sub = $decodedToken['sub'];
+
             if (!empty($userAuth['error'])) {
                 return response([
                     'success' => false,
@@ -36,11 +41,15 @@ class LoginController
         }
         $cryptedMail = $this->encrypt($user);
         $user = User::where('email', $cryptedMail)->with('workspaces')->first();
+        $user->sub = $sub;
+        $user->save();
 
         // put refresh token in cache
         $refreshToken = $userAuth['RefreshToken'];
-        Cache::put($user->sub.'refresh_token', $refreshToken, Carbon::now()->addDays(30));
-        Cache::put($user->sub.'id_token', $refreshToken, Carbon::now()->addDays(30));
+        $idToken = $userAuth['IdToken'];
+
+        Cache::put($sub.'refresh_token', $refreshToken, Carbon::now()->addDays(30));
+        Cache::put($sub.'id_token', $idToken, Carbon::now()->addDays(30));
         
         return response([
             'success' => true,
