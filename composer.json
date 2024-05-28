@@ -41,7 +41,7 @@
         "illuminate/cache": "^11.7",
         "illuminate/validation": "^11.3",
         "predis/predis": "2.2.2",
-        "mlabfactory/libs-mailer": "v1.1.2-RC",
+        "mlabfactory/libs-mailer": "v1.1.4",
         "malirobot/aws-cognito": "v2.1",
         "budgetcontrol/libs-connector": "v0.2.1",
         "logtail/monolog-logtail": "^3.1"

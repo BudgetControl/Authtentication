@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a568c7158189b28b1a69e808ca92ce06",
+    "content-hash": "8e64142fb1cc10da02d897eddcac2286",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2561,16 +2561,16 @@
         },
         {
             "name": "mlabfactory/libs-mailer",
-            "version": "v1.1.2-RC",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlabfactory/Libs_Mailer.git",
-                "reference": "27a19a28c11e402090b48dbda3d1c93af9aa3098"
+                "reference": "f335aca321768704062a8fd632e2ad57536d7363"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlabfactory/Libs_Mailer/zipball/27a19a28c11e402090b48dbda3d1c93af9aa3098",
-                "reference": "27a19a28c11e402090b48dbda3d1c93af9aa3098",
+                "url": "https://api.github.com/repos/mlabfactory/Libs_Mailer/zipball/f335aca321768704062a8fd632e2ad57536d7363",
+                "reference": "f335aca321768704062a8fd632e2ad57536d7363",
                 "shasum": ""
             },
             "require": {
@@ -2595,10 +2595,10 @@
             ],
             "description": "Budget control SDK package mailer",
             "support": {
-                "source": "https://github.com/mlabfactory/Libs_Mailer/tree/v1.1.2-RC",
+                "source": "https://github.com/mlabfactory/Libs_Mailer/tree/v1.1.4",
                 "issues": "https://github.com/mlabfactory/Libs_Mailer/issues"
             },
-            "time": "2024-05-20T08:03:18+00:00"
+            "time": "2024-05-23T17:02:57+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -9432,14 +9432,12 @@
     ],
     "aliases": [],
     "minimum-stability": "RC",
-    "stability-flags": {
-        "mlabfactory/libs-mailer": 5
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
