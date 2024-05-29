@@ -54,16 +54,6 @@ switch(env('APP_LOG_LEVEL','debug')) {
         $logLevel = Level::Debug;
 }
 
-//setup log with BetterStack
-$logger = new \Monolog\Logger('MS-AUTH');
-$logger→pushHandler(new \Logtail\Monolog\LogtailHandler(env('LOGTAIL_API_KEY')));
-
-// log on FS
-$logPath = env('APP_LOG_PATH',__DIR__.'/../storage/logs/log-'.date("Ymd").'.log');
-$streamHandler = new \Monolog\Handler\StreamHandler($logPath, $logLevel);
-$formatter = new \Monolog\Formatter\SyslogFormatter();
-$streamHandler->setFormatter($formatter);
-$logger->pushHandler($streamHandler);
 
 // config cahce
 require_once __DIR__ . '/../config/cache.php';
@@ -79,6 +69,9 @@ $validator = new Validator(
 );
 // AWS Cognito client
 require_once __DIR__ . '/../config/aws-cognito.php';
+
+// Set up the logger
+require_once __DIR__ . '/../config/logger.php';
 
 // Set up the Facade application
 Facade::setFacadeApplication([
