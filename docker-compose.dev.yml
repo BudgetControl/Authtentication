@@ -3,23 +3,10 @@ version: '2.2'
 services:
     bemodule:
       container_name: budgetcontrol-ms-authentication
-      image: budgetcontrol/core:xdebug-v2.2
+      image: mlabfactory/php8-apache:v1.0-xdebug
       ports:
         - "8083:80"
       restart: unless-stopped
-    database:
-      container_name: budgetcontrol-db
-      image: mysql:8.0.36-debian
-      restart: unless-stopped
-      environment:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-        MYSQL_USER: ${MYSQL_USERNAME}
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_DATABASE: ${DB_DATABASE}
-      volumes:
-        - mysql_persistent:/var/lib/mysql
-      networks:
-        - budgetcontrol_network
 
 networks:
   budgetcontrol_network:
