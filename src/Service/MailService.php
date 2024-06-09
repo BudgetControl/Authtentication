@@ -12,8 +12,14 @@ class MailService {
 
     public function __construct()
     {
-        $dsn = new Dsn(ENV('MAIL_DRIVER','mailhog'), env('MAIL_HOST'), env('MAIL_USER'), env('MAIL_PASSWORD'));
-        $this->emailService = new EmailService($dsn, env('MAIL_FROM_ADDRESS'));
+        $mail = new \MLAB\SdkMailer\Service\Mail();
+        $mail->setHost(env('MAIL_HOST', 'mailhog'));
+        $mail->setDriver(env('MAIL_DRIVER', 'mailhog'));
+        $mail->setPassword(env('MAIL_PASSWORD', ''));
+        $mail->setUser(env('MAIL_USER', ''));
+        $mail->setEmailFromAddress(env('MAIL_FROM_ADDRESS'));
+
+        $this->emailService = $mail;
     }
 
     public function send_signUpMail(string $to, string $name, string $token)
