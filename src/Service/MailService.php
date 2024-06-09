@@ -1,14 +1,11 @@
 <?php
 namespace Budgetcontrol\Authentication\Service;
 
-use Budgetcontrol\SdkMailer\Domain\Transport\ArubaSmtp;
-use MLAB\SdkMailer\Service\EmailService;
-use Symfony\Component\Mailer\Transport\Dsn;
 use MLAB\SdkMailer\View\AuthMail;
 
 class MailService {
 
-    private EmailService $emailService;
+    private \MLAB\SdkMailer\Service\Mail $emailService;
 
     public function __construct()
     {
