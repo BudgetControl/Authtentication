@@ -25,6 +25,6 @@ jobs:
               ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
               password: ${{ secrets.SFTP_PASSWORD }} 
               local_path: '.'
-              remote_path: '/var/www/budgetcontrol/Core/microservices/Gateway'
+              remote_path: '/var/www/budgetcontrol/Core/microservices/Authentication'
               sftpArgs: '-o ConnectTimeout=5'
   
