@@ -29,9 +29,10 @@ trait AuthFlow {
         $userData->password = $params['password'];
         $userData->id = $userId;
 
-        Cache::put($token->getToken(), $userData, Carbon::now()->addMinutes(10));
+        $tokenLabel = sha1($token->getToken());
+        Cache::put($tokenLabel, $userData, Carbon::now()->addMinutes(10));
 
-        return $token->getToken();
+        return $tokenLabel;
         
     }
 }

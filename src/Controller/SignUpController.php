@@ -73,7 +73,7 @@ class SignUpController
                 $user->name = $params["name"];
                 $user->email = $params["email"];
                 $user->password = $data['password'];
-                $user->sub = $cognito['sub'];
+                $user->sub = $cognito['User']['Username'];
                 $user->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
                 $user->save();
 
@@ -93,7 +93,7 @@ class SignUpController
                     throw new \Exception("Error creating workspace");
                 }
 
-                $token =$this->generateToken($params, $user->id);
+                $token = $this->generateToken($params, $user->id);
 
                 $mail = new \Budgetcontrol\Authentication\Service\MailService();
                 $mail->send_signUpMail($params["email"], $user->name, $token);
@@ -139,7 +139,7 @@ class SignUpController
         } catch (\Throwable $e) {
             Log::critical($e->getMessage());
             Cache::forget($token);
-            return response(["error" => "Ops an error occurred"], 400);
+            return response(["error" => "Token is not valid or expired"], 400);
         }
 
         $user = User::find($user->id);
