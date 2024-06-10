@@ -2,9 +2,9 @@
 namespace Budgetcontrol\Authentication\Service;
 
 use Budgetcontrol\SdkMailer\Domain\Transport\ArubaSmtp;
-use Budgetcontrol\SdkMailer\Service\EmailService;
+use MLAB\SdkMailer\Service\EmailService;
 use Symfony\Component\Mailer\Transport\Dsn;
-use Budgetcontrol\SdkMailer\View\AuthMail;
+use MLAB\SdkMailer\View\AuthMail;
 
 class MailService {
 
