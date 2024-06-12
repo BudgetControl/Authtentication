@@ -13,10 +13,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/mlabfactory/aws-cognito.git",
-            "options": {
-                "branch": "php-v8"
-            }
+            "url": "https://github.com/MaliRobot/aws-cognito.git"
         }
     ],
     "require": {
@@ -42,7 +39,7 @@
         "illuminate/validation": "^11.3",
         "predis/predis": "2.2.2",
         "mlabfactory/libs-mailer": "v1.1.4",
-        "malirobot/aws-cognito": "v2.1",
+        "malirobot/aws-cognito": "v1.0",
         "budgetcontrol/libs-connector": "v1.0",
         "logtail/monolog-logtail": "^3.1"
     },

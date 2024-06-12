@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a47a5864021ca8107d7675264326a52",
+    "content-hash": "c60c651a16ed7aac49a84b7d943542bf",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2508,16 +2508,16 @@
         },
         {
             "name": "malirobot/aws-cognito",
-            "version": "v2.1",
+            "version": "v1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mlabfactory/aws-cognito.git",
-                "reference": "2c8503a20e9b19d7f3c4eadf00fa41eaa4ec4c3f"
+                "url": "https://github.com/MaliRobot/aws-cognito.git",
+                "reference": "2b26c5e8e50014a5e74801df8ca13c0614d6964a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlabfactory/aws-cognito/zipball/2c8503a20e9b19d7f3c4eadf00fa41eaa4ec4c3f",
-                "reference": "2c8503a20e9b19d7f3c4eadf00fa41eaa4ec4c3f",
+                "url": "https://api.github.com/repos/MaliRobot/aws-cognito/zipball/2b26c5e8e50014a5e74801df8ca13c0614d6964a",
+                "reference": "2b26c5e8e50014a5e74801df8ca13c0614d6964a",
                 "shasum": ""
             },
             "require": {
@@ -2556,9 +2556,9 @@
                 "php"
             ],
             "support": {
-                "source": "https://github.com/mlabfactory/aws-cognito/tree/v2.1"
+                "source": "https://github.com/MaliRobot/aws-cognito/tree/v1.0"
             },
-            "time": "2024-05-20T08:18:20+00:00"
+            "time": "2024-06-12T08:28:53+00:00"
         },
         {
             "name": "mlabfactory/libs-mailer",
