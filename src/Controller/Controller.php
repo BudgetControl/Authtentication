@@ -11,9 +11,9 @@ class Controller {
     public function monitor(Request $request, Response $response)
     {
         $dbHost = env('DB_HOST');
-        $dbUser = env('DB_USER');
-        $dbPass = env('DB_PASS');
-        $dbName = env('DB_NAME');
+        $dbUser = env('DB_USERNAME');
+        $dbPass = env('DB_PASSWORD');
+        $dbName = env('DB_DATABASE');
 
         // Assuming you are using PDO for database connection
         try {
