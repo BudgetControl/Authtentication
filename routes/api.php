@@ -15,3 +15,5 @@ $app->get('/authenticate/{provider}', \Budgetcontrol\Authentication\Controller\P
 $app->get('/authenticate/token/{provider}', \Budgetcontrol\Authentication\Controller\ProviderController::class . ':providerToken');
 $app->get('/logout', \Budgetcontrol\Authentication\Controller\AuthController::class . ':logout');
 $app->get('/user-info/by-email/{email}', \Budgetcontrol\Authentication\Controller\AuthController::class . ':userInfoByEmail');
+
+$app->get('/monitor', \Budgetcontrol\Authentication\Controller\Controller::class . ':monitor');
