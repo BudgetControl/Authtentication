@@ -64,6 +64,16 @@ class SignUpController
         ]);
 
         $data = $collection->only('name', 'email', 'password');
+
+        //check if user already exist
+        if (User::where('email', $this->encrypt($params["email"]))->exists()) {
+            Log::info("User already exists");
+            return response([
+                "success" => false,
+                "error" => "Generic error occurred, try again later."
+            ], 400);
+        }
+
         try {
 
             if ($cognito = $this->createCognitoUser($data)) { //
